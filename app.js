@@ -1,11 +1,21 @@
-const prompts = [
-  "tiger", "dog", "cat", "pizza", "burger", "banana", "apple", "car", "truck",
-  "airplane", "rocket", "house", "tree", "fish", "shark", "ghost", "zombie",
-  "robot", "dragon", "monkey", "spider", "basketball", "football", "phone",
-  "computer", "headphones", "chair", "bed", "toothbrush", "ice cream",
-  "Walmart", "school", "doctor", "police car", "fire truck", "beach",
-  "snowman", "alien", "ninja", "pirate", "clown"
+const drawingPrompts = [
+  "tiger","dog","cat","lion","bear","shark","fish","bird","snake","horse","cow","pig","monkey","elephant","giraffe","zebra","rabbit","mouse","spider","bee",
+  "pizza","burger","fries","hot dog","ice cream","cake","donut","apple","banana","watermelon","taco","sandwich","cookie","egg","cheese",
+  "chair","table","bed","couch","lamp","door","window","toilet","sink","bathtub","mirror","clock","tv","computer","phone","headphones","camera","backpack",
+  "car","truck","bus","train","airplane","boat","bicycle","motorcycle","rocket","helicopter","skateboard",
+  "house","school","hospital","castle","beach","mountain","tree","flower","sun","moon","star","cloud","rainbow","snowman","fire","volcano",
+  "basketball","football","baseball","soccer ball","tennis racket","guitar","piano","microphone","crown","sword","shield","robot","alien","ghost","zombie","dragon","pirate","ninja","clown"
 ];
+
+const charadesPrompts = [
+  "sitting","running","jumping","crying","laughing","sleeping","waking up","dancing","singing","sneezing","coughing","brushing teeth","washing hands","eating","drinking",
+  "driving","flying a plane","swimming","fishing","boxing","playing basketball","playing football","playing guitar","typing","texting","taking a selfie","cooking","cleaning",
+  "lifting weights","falling down","being scared","being cold","being hot","opening a door","walking a dog","riding a horse","skateboarding","bowling","throwing a ball",
+  "reading a book","watching tv","putting on shoes","combing hair","taking a shower","zipping a jacket","painting","drawing","digging","climbing","hiding","searching"
+];
+
+let usedDrawingPrompts = JSON.parse(localStorage.getItem("usedDrawingPrompts") || "[]");
+let usedCharadesPrompts = JSON.parse(localStorage.getItem("usedCharadesPrompts") || "[]");
 
 let game = {
   active: false,
@@ -16,6 +26,7 @@ let game = {
   secondsLeft: 60,
   answer: "",
   solved: false,
+  waitingForNext: false,
   sessionScores: {},
   timer: null
 };
@@ -55,6 +66,9 @@ const winnerPopup = document.getElementById("winnerPopup");
 const winnerAnswer = document.getElementById("winnerAnswer");
 const winnerName = document.getElementById("winnerName");
 
+const timesUpPopup = document.getElementById("timesUpPopup");
+const timesUpAnswer = document.getElementById("timesUpAnswer");
+
 const finalLeaderboard = document.getElementById("finalLeaderboard");
 const hostLeaderboard = document.getElementById("hostLeaderboard");
 const charadesBox = document.getElementById("charadesBox");
@@ -70,9 +84,7 @@ function normalize(text) {
 function censorUsername(username) {
   let clean = String(username || "unknown");
 
-  const banned = [
-    "nigger", "nigga", "faggot", "retard", "kike", "chink", "spic"
-  ];
+  const banned = ["nigger","nigga","faggot","retard","kike","chink","spic"];
 
   banned.forEach(word => {
     const reg = new RegExp(word, "gi");
@@ -88,8 +100,35 @@ function formatTime(seconds) {
   return `${m}:${String(s).padStart(2, "0")}`;
 }
 
-function randomPrompt() {
-  return prompts[Math.floor(Math.random() * prompts.length)];
+function getPromptForMode(mode) {
+  const list = mode === "charades" ? charadesPrompts : drawingPrompts;
+  let used = mode === "charades" ? usedCharadesPrompts : usedDrawingPrompts;
+
+  const available = list.filter(word => !used.includes(word));
+
+  if (available.length === 0) {
+    used = [];
+    if (mode === "charades") {
+      usedCharadesPrompts = [];
+      localStorage.setItem("usedCharadesPrompts", JSON.stringify([]));
+    } else {
+      usedDrawingPrompts = [];
+      localStorage.setItem("usedDrawingPrompts", JSON.stringify([]));
+    }
+  }
+
+  const freshList = list.filter(word => !(mode === "charades" ? usedCharadesPrompts : usedDrawingPrompts).includes(word));
+  const word = freshList[Math.floor(Math.random() * freshList.length)];
+
+  if (mode === "charades") {
+    usedCharadesPrompts.push(word);
+    localStorage.setItem("usedCharadesPrompts", JSON.stringify(usedCharadesPrompts));
+  } else {
+    usedDrawingPrompts.push(word);
+    localStorage.setItem("usedDrawingPrompts", JSON.stringify(usedDrawingPrompts));
+  }
+
+  return word;
 }
 
 function updateUI() {
@@ -116,13 +155,15 @@ function startGame() {
   game.mode = modeInput.value;
   game.totalRounds = Number(roundCountInput.value);
   game.roundSeconds = Number(timerSecondsInput.value);
-  game.secondsLeft = game.roundSeconds;
   game.round = 0;
   game.active = true;
   game.solved = false;
+  game.waitingForNext = false;
   game.sessionScores = {};
 
   finalLeaderboard.classList.add("hidden");
+  winnerPopup.classList.add("hidden");
+  timesUpPopup.classList.add("hidden");
 
   nextRound();
 }
@@ -137,15 +178,17 @@ function nextRound() {
 
   game.round++;
   game.solved = false;
+  game.waitingForNext = false;
   game.secondsLeft = game.roundSeconds;
 
   const custom = customWordInput.value.trim();
-  game.answer = custom || randomPrompt();
+  game.answer = custom || getPromptForMode(game.mode);
 
   customWordInput.value = "";
 
   clearDrawing();
   winnerPopup.classList.add("hidden");
+  timesUpPopup.classList.add("hidden");
   finalLeaderboard.classList.add("hidden");
 
   startTimer();
@@ -156,19 +199,16 @@ function startTimer() {
   clearInterval(game.timer);
 
   game.timer = setInterval(() => {
-    if (!game.active || game.solved) return;
+    if (!game.active || game.solved || game.waitingForNext) return;
 
     game.secondsLeft--;
 
     if (game.secondsLeft <= 0) {
       game.secondsLeft = 0;
       game.solved = true;
-
+      game.waitingForNext = true;
+      clearInterval(game.timer);
       showNoWinner();
-
-      setTimeout(() => {
-        nextRound();
-      }, 4000);
     }
 
     updateUI();
@@ -182,7 +222,7 @@ function calculatePoints() {
 }
 
 function handleGuess(username, message) {
-  if (!game.active || game.solved || !game.answer) return;
+  if (!game.active || game.solved || game.waitingForNext || !game.answer) return;
 
   const cleanUsername = censorUsername(username);
   const guess = normalize(message);
@@ -190,34 +230,32 @@ function handleGuess(username, message) {
 
   if (guess === answer) {
     game.solved = true;
+    game.waitingForNext = true;
+    clearInterval(game.timer);
 
     const points = calculatePoints();
     game.sessionScores[cleanUsername] = (game.sessionScores[cleanUsername] || 0) + points;
 
     showWinner(cleanUsername, points);
-
-    setTimeout(() => {
-      nextRound();
-    }, 4000);
-
     updateUI();
   }
 }
 
 function showWinner(username, points) {
   winnerAnswer.textContent = game.answer;
-  winnerName.textContent = `@${username} GOT IT FIRST! +${points}`;
+  winnerName.textContent = `@${username}`;
+  document.querySelector(".got-first").textContent = `GOT IT FIRST! +${points} POINTS`;
   winnerPopup.classList.remove("hidden");
 }
 
 function showNoWinner() {
-  winnerAnswer.textContent = game.answer;
-  winnerName.textContent = `NO ONE GOT IT!`;
-  winnerPopup.classList.remove("hidden");
+  timesUpAnswer.textContent = game.answer;
+  timesUpPopup.classList.remove("hidden");
 }
 
 function endGame(showFinal) {
   game.active = false;
+  game.waitingForNext = false;
   clearInterval(game.timer);
 
   if (showFinal) {
@@ -395,7 +433,7 @@ function extractChat(data) {
 connectBtn.onclick = connectTikFinity;
 
 randomWordBtn.onclick = () => {
-  customWordInput.value = randomPrompt();
+  customWordInput.value = getPromptForMode(modeInput.value);
 };
 
 startGameBtn.onclick = startGame;
@@ -408,6 +446,14 @@ eraserBtn.onclick = () => {
   eraser = !eraser;
   eraserBtn.textContent = eraser ? "Eraser On" : "Eraser Off";
 };
+
+document.querySelectorAll(".color-dot").forEach(button => {
+  button.onclick = () => {
+    brushColor.value = button.dataset.color;
+    eraser = false;
+    eraserBtn.textContent = "Eraser Off";
+  };
+});
 
 document.getElementById("testGuessBtn").onclick = () => {
   const username = document.getElementById("testUsername").value || "testuser";
