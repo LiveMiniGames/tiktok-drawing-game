@@ -3,23 +3,23 @@
 }
 
 :root {
-  --bg: #09090b;
-  --panel: #141417;
-  --panel-2: #1c1c21;
-  --border: #2f3037;
-  --text: #f8fafc;
-  --muted: #a1a1aa;
-  --accent: #2563eb;
-  --success: #16a34a;
-  --warning: #f59e0b;
-  --danger: #dc2626;
+  --bg: #0b0b0d;
+  --panel: #151518;
+  --panel2: #1f2024;
+  --border: #34363d;
+  --text: #f5f5f5;
+  --muted: #a3a3a3;
+  --blue: #2563eb;
+  --green: #16a34a;
+  --yellow: #f59e0b;
+  --red: #dc2626;
 }
 
 body {
   margin: 0;
-  background: #09090b;
+  background: var(--bg);
   color: var(--text);
-  font-family: Inter, Arial, Helvetica, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .app {
@@ -59,7 +59,7 @@ label {
   margin-top: 12px;
   font-size: 13px;
   color: var(--muted);
-  font-weight: 700;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -77,24 +77,19 @@ button {
 
 input,
 select {
-  background: #0f0f12;
+  background: #0f1013;
   color: var(--text);
 }
 
 button {
-  background: #2563eb;
+  background: var(--blue);
   color: white;
-  font-weight: 800;
+  font-weight: 900;
   cursor: pointer;
-  transition: transform 0.08s ease, background 0.12s ease;
 }
 
 button:hover {
   background: #1d4ed8;
-}
-
-button:active {
-  transform: scale(0.98);
 }
 
 hr {
@@ -104,11 +99,11 @@ hr {
 }
 
 #secretWord {
-  background: #0f0f12;
+  background: #0f1013;
   border: 1px solid var(--border);
   color: #22c55e;
   font-size: 30px;
-  font-weight: 900;
+  font-weight: 950;
   text-align: center;
   padding: 12px;
   border-radius: 12px;
@@ -132,7 +127,7 @@ hr {
 
 .preset.active {
   border: 3px solid white;
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--blue);
 }
 
 .stream-area {
@@ -154,8 +149,8 @@ hr {
 
 .topbar {
   height: 60px;
-  background: #18181c;
-  border: 1px solid #2b2c34;
+  background: #1a1b20;
+  border: 1px solid #32333a;
   border-radius: 16px;
   display: flex;
   align-items: center;
@@ -169,45 +164,35 @@ hr {
 #timerText {
   padding: 6px 14px;
   border-radius: 12px;
-  min-width: 102px;
+  min-width: 104px;
   text-align: center;
 }
 
 .timer-ok {
-  color: #22c55e;
-  background: rgba(34, 197, 94, 0.1);
+  color: white;
+  background: var(--green);
 }
 
 .timer-mid {
-  color: #f59e0b;
-  background: rgba(245, 158, 11, 0.14);
-  animation: timerPulse 0.75s infinite alternate;
+  color: #111;
+  background: var(--yellow);
+  animation: timerPulse 0.65s infinite alternate;
 }
 
 .timer-danger {
   color: white;
-  background: #dc2626;
-  animation: timerDanger 0.32s infinite alternate;
+  background: var(--red);
+  animation: timerDanger 0.28s infinite alternate;
 }
 
 @keyframes timerPulse {
-  from {
-    transform: scale(1);
-  }
-  to {
-    transform: scale(1.08);
-  }
+  from { transform: scale(1); }
+  to { transform: scale(1.08); }
 }
 
 @keyframes timerDanger {
-  from {
-    transform: scale(1.05) rotate(-1deg);
-    background: #dc2626;
-  }
-  to {
-    transform: scale(1.2) rotate(1deg);
-    background: #991b1b;
-  }
+  from { transform: scale(1.05) rotate(-1deg); }
+  to { transform: scale(1.22) rotate(1deg); }
 }
 
 .draw-wrap {
@@ -215,28 +200,24 @@ hr {
   margin-top: 14px;
   width: 100%;
   height: 520px;
-  background: #0f172a;
+  background: #ffffff;
   border: 1px solid #303039;
   border-radius: 18px;
   overflow: hidden;
 }
 
 .draw-wrap.mid-warning {
-  border-color: #f59e0b;
+  border: 4px solid var(--yellow);
 }
 
 .draw-wrap.danger-warning {
-  border-color: #dc2626;
-  animation: borderFlash 0.35s infinite alternate;
+  border: 4px solid var(--red);
+  animation: borderFlash 0.28s infinite alternate;
 }
 
 @keyframes borderFlash {
-  from {
-    box-shadow: inset 0 0 0 0 rgba(220, 38, 38, 0);
-  }
-  to {
-    box-shadow: inset 0 0 0 10px rgba(220, 38, 38, 0.55);
-  }
+  from { box-shadow: inset 0 0 0 0 rgba(220, 38, 38, 0); }
+  to { box-shadow: inset 0 0 0 14px rgba(220, 38, 38, 0.65); }
 }
 
 canvas {
@@ -245,7 +226,7 @@ canvas {
   display: block;
   cursor: crosshair;
   touch-action: none;
-  background: #0f172a;
+  background: #ffffff;
 }
 
 .charades {
@@ -256,28 +237,21 @@ canvas {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 14px;
+  gap: 18px;
   text-align: center;
   padding: 34px;
 }
 
-.charades-kicker {
-  font-size: 18px;
-  color: var(--muted);
-  font-weight: 800;
-  letter-spacing: 0.12em;
-}
-
 .charades-title {
-  font-size: 58px;
+  font-size: 48px;
   font-weight: 950;
 }
 
 .charades-subtitle {
-  font-size: 25px;
+  font-size: 28px;
   line-height: 1.25;
-  color: #d4d4d8;
-  font-weight: 800;
+  color: #00ff88;
+  font-weight: 900;
 }
 
 .winner,
@@ -285,54 +259,75 @@ canvas {
   position: absolute;
   inset: 0;
   color: white;
-  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 14px;
+  gap: 18px;
   font-weight: 950;
   text-align: center;
-  z-index: 10;
+  z-index: 999;
   padding: 22px;
 }
 
 .winner {
-  background: linear-gradient(180deg, #16a34a, #064e3b);
+  background: linear-gradient(180deg, #16a34a, #052e16);
 }
 
 .timesup {
-  background: linear-gradient(180deg, #dc2626, #450a0a);
+  background: linear-gradient(180deg, #ef4444, #450a0a);
 }
 
 .popup-label {
-  font-size: 30px;
-  letter-spacing: 0.05em;
+  font-size: 25px;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.85);
 }
 
 .popup-answer {
-  font-size: 62px;
+  font-size: 64px;
   text-transform: uppercase;
   line-height: 1;
   max-width: 96%;
   overflow-wrap: anywhere;
+  color: white;
+}
+
+.winner-card,
+.answer-card {
+  background: rgba(0,0,0,0.35);
+  border: 2px solid rgba(255,255,255,0.22);
+  border-radius: 20px;
+  padding: 18px 24px;
+  width: 92%;
 }
 
 .winner-user {
   font-size: 42px;
-  background: rgba(0, 0, 0, 0.35);
-  padding: 12px 24px;
-  border-radius: 16px;
-  max-width: 96%;
   overflow-wrap: anywhere;
 }
 
-.winner-points,
-.no-one {
-  font-size: 34px;
+.winner-points {
+  font-size: 30px;
+  margin-top: 8px;
+  color: #bbf7d0;
 }
 
 .timesup-title {
-  font-size: 64px;
+  background: white;
+  color: #b91c1c;
+  padding: 10px 26px;
+  border-radius: 18px;
+  font-size: 58px;
+  line-height: 1;
+}
+
+.no-one {
+  background: #111;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 18px;
+  font-size: 36px;
+  border: 2px solid rgba(255,255,255,0.2);
 }
 
 .final {
