@@ -1,372 +1,556 @@
-* {
-  box-sizing: border-box;
+const drawingNouns = [
+  "apple","banana","orange","pizza","burger","fries","taco","donut","cake","cookie","ice cream","watermelon","pineapple","coffee cup","soda can","water bottle","sandwich","hot dog","popcorn","cupcake",
+  "dog","cat","tiger","lion","bear","panda","monkey","elephant","giraffe","zebra","horse","cow","pig","sheep","rabbit","mouse","kangaroo","fox","wolf","deer",
+  "shark","whale","dolphin","fish","octopus","crab","lobster","jellyfish","turtle","frog","snake","lizard","bird","eagle","owl","penguin","duck","chicken","flamingo","parrot",
+  "bee","butterfly","spider","ant","ladybug","dragonfly","snail","scorpion","house","castle","school","hospital","barn","store","hotel","skyscraper","tent","cabin","bridge","tower",
+  "beach","island","mountain","volcano","waterfall","river","lake","ocean","forest","cave","desert","road","fence","garden","playground","swimming pool","treehouse","campfire","mailbox","traffic light",
+  "sun","moon","star","cloud","rainbow","lightning bolt","snowman","fire","planet","rocket","spaceship","alien","robot","ghost","zombie","dragon","unicorn","monster","pirate ship","treasure chest",
+  "chair","table","bed","couch","lamp","door","window","toilet","sink","bathtub","mirror","clock","television","computer","laptop","keyboard","phone","headphones","camera","speaker",
+  "fridge","microwave","oven","toaster","fork","spoon","knife","plate","bowl","mug","backpack","book","pencil","marker","scissors","ruler","calculator","trash can","broom","bucket",
+  "shirt","pants","jacket","hoodie","hat","shoe","boot","glove","watch","sunglasses","umbrella","wallet","suitcase","shopping cart","gift box","balloon","kite","teddy bear","mask","ski mask",
+  "car","truck","bus","train","airplane","helicopter","boat","submarine","bicycle","motorcycle","scooter","skateboard","taxi","police car","fire truck","ambulance","tractor","bulldozer","dump truck","tow truck",
+  "basketball","football","soccer ball","baseball","tennis ball","volleyball","bowling ball","hockey stick","tennis racket","baseball bat","trophy","medal","helmet","boxing glove","dumbbell","surfboard","snowboard","skis","fishing rod","dartboard",
+  "guitar","piano","drum","violin","trumpet","microphone","boombox","music note","dice","game controller","arcade machine","vending machine","money bag","dollar bill","coin","hammer","wrench","screwdriver","saw","drill",
+  "ladder","toolbox","flashlight","candle","light bulb","battery","lock","key","anchor","compass","map","globe","binoculars","telescope","magnifying glass","thermometer","first aid kit","bandage","toothbrush","soap",
+  "towel","hairbrush","lipstick","alarm clock","calendar","newspaper","envelope","paper airplane","whiteboard","chalkboard","graduation cap","lunchbox","printer","pizza box","chopsticks","frying pan","chef hat","apron","candy bar","lollipop"
+];
+
+const drawableAdjectives = ["", "big", "tiny", "giant", "cartoon", "broken", "happy", "angry", "sleepy", "spooky", "golden", "blue", "red", "green", "fancy", "old", "new", "floating", "melting", "exploding"];
+
+const charadesActions = [
+  "running","jumping","walking","tiptoeing","marching","crawling","climbing","falling down","tripping","slipping","spinning","stretching","yawning","sleeping","waking up","sneezing","coughing","laughing","crying","shouting",
+  "whispering","talking on phone","texting","taking a selfie","posing for a photo","checking watch","looking confused","looking scared","looking angry","looking excited","being shocked","being dizzy","being cold","being hot","being tired","hiding",
+  "searching","waving","clapping","pointing","saluting","begging","celebrating","cheering","booing","flexing","dancing","breakdancing","singing","rapping","playing air guitar","playing piano","playing drums","brushing teeth","washing hands","taking a shower",
+  "combing hair","putting on makeup","shaving face","getting a haircut","putting on shoes","tying shoes","zipping jacket","folding clothes","doing laundry","making bed","vacuuming","sweeping","mopping","washing dishes","cooking","flipping pancakes",
+  "stirring soup","chopping vegetables","eating spaghetti","eating a burger","eating ice cream","drinking water","blowing on food","ordering food","paying cashier","carrying groceries","shopping","pushing shopping cart","opening present","blowing out candles","cutting cake","wrapping gift",
+  "driving car","turning steering wheel","honking horn","parking car","riding bike","riding horse","rowing boat","swimming","diving","surfing","ice skating","skateboarding","jumping rope","lifting weights","doing pushups","doing situps",
+  "doing jumping jacks","doing yoga","meditating","boxing","punching bag","kicking ball","shooting basketball","dribbling basketball","throwing football","catching football","swinging baseball bat","bowling","golfing","playing tennis","throwing frisbee","fishing",
+  "walking dog","feeding pet","petting dog","being a dog","being a cat","being a monkey","being a chicken","being a shark","being a robot","being a zombie","being a ghost","being an alien","being a pirate","being a ninja","being a cowboy","being a baby",
+  "being an old person","being a teacher","being a doctor","being a chef","being a police officer","being a firefighter","being a magician","doing magic trick","pulling rope","pushing wall","opening door","closing door","knocking on door","ringing doorbell","looking through window","locking door"
+];
+
+const actionStyles = ["", "slowly", "quickly", "dramatically", "silently", "badly", "carefully", "angrily", "excitedly", "like a pro"];
+
+function expandDrawingPrompts() {
+  const result = new Set(drawingNouns);
+
+  for (const adjective of drawableAdjectives) {
+    for (const noun of drawingNouns) {
+      if (adjective) result.add(`${adjective} ${noun}`);
+      if (result.size >= 520) return [...result];
+    }
+  }
+
+  return [...result];
 }
 
-:root {
-  --bg: #0b0b0d;
-  --panel: #151518;
-  --panel2: #1f2024;
-  --border: #34363d;
-  --text: #f5f5f5;
-  --muted: #a3a3a3;
-  --blue: #2563eb;
-  --green: #16a34a;
-  --yellow: #f59e0b;
-  --red: #dc2626;
+function expandCharadesPrompts() {
+  const result = new Set(charadesActions);
+
+  for (const style of actionStyles) {
+    for (const action of charadesActions) {
+      if (style) result.add(`${style} ${action}`);
+      if (result.size >= 520) return [...result];
+    }
+  }
+
+  return [...result];
 }
 
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: Arial, Helvetica, sans-serif;
+const drawingPrompts = expandDrawingPrompts();
+const charadesPrompts = expandCharadesPrompts();
+
+let drawingBag = JSON.parse(localStorage.getItem("drawingBagV3") || "[]");
+let charadesBag = JSON.parse(localStorage.getItem("charadesBagV3") || "[]");
+
+let game = {
+  active: false,
+  mode: "drawing",
+  round: 0,
+  totalRounds: 5,
+  roundSeconds: 60,
+  secondsLeft: 60,
+  answer: "",
+  solved: false,
+  waitingForNext: false,
+  sessionScores: {},
+  timer: null
+};
+
+let ws = null;
+let drawing = false;
+let lastX = 0;
+let lastY = 0;
+let eraser = false;
+let currentBrushColor = "#ffffff";
+let currentBgColor = "#ffffff";
+
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+const drawWrap = document.getElementById("drawWrap");
+const connectBtn = document.getElementById("connectBtn");
+const connectionStatus = document.getElementById("connectionStatus");
+const modeInput = document.getElementById("mode");
+const roundCountInput = document.getElementById("roundCount");
+const timerSecondsInput = document.getElementById("timerSeconds");
+const customWordInput = document.getElementById("customWord");
+const randomWordBtn = document.getElementById("randomWordBtn");
+const startGameBtn = document.getElementById("startGameBtn");
+const nextRoundBtn = document.getElementById("nextRoundBtn");
+const endGameBtn = document.getElementById("endGameBtn");
+const secretWord = document.getElementById("secretWord");
+const brushColor = document.getElementById("brushColor");
+const bgColor = document.getElementById("bgColor");
+const applyBgBtn = document.getElementById("applyBgBtn");
+const brushSize = document.getElementById("brushSize");
+const eraserBtn = document.getElementById("eraserBtn");
+const clearBtn = document.getElementById("clearBtn");
+const roundText = document.getElementById("roundText");
+const timerText = document.getElementById("timerText");
+const winnerPopup = document.getElementById("winnerPopup");
+const winnerAnswer = document.getElementById("winnerAnswer");
+const winnerName = document.getElementById("winnerName");
+const winnerPoints = document.getElementById("winnerPoints");
+const timesUpPopup = document.getElementById("timesUpPopup");
+const timesUpAnswer = document.getElementById("timesUpAnswer");
+const finalLeaderboard = document.getElementById("finalLeaderboard");
+const hostLeaderboard = document.getElementById("hostLeaderboard");
+const charadesBox = document.getElementById("charadesBox");
+
+function showElement(el, displayType = "flex") {
+  el.classList.remove("hidden");
+  el.style.display = displayType;
 }
 
-.app {
-  height: 100vh;
-  padding: 18px;
-  display: flex;
-  gap: 18px;
+function hideElement(el) {
+  el.classList.add("hidden");
+  el.style.display = "none";
 }
 
-.controls {
-  width: 370px;
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 16px;
-  overflow-y: auto;
+function normalize(text) {
+  return String(text || "")
+    .toLowerCase()
+    .replace(/[^\w\s]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
-.controls h1 {
-  margin: 0 0 14px;
-  font-size: 24px;
+function censorUsername(username) {
+  let clean = String(username || "unknown");
+  const banned = ["nigger", "nigga", "faggot", "retard", "kike", "chink", "spic"];
+  banned.forEach(word => clean = clean.replace(new RegExp(word, "gi"), "****"));
+  return clean;
 }
 
-.controls h2 {
-  font-size: 16px;
-  margin: 14px 0 8px;
+function formatTime(seconds) {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return `${m}:${String(s).padStart(2, "0")}`;
 }
 
-.status {
-  color: var(--muted);
-  font-size: 13px;
-  margin-top: 8px;
+function cryptoRandom() {
+  if (window.crypto && window.crypto.getRandomValues) {
+    const values = new Uint32Array(1);
+    window.crypto.getRandomValues(values);
+    return values[0] / (0xffffffff + 1);
+  }
+  return Math.random();
 }
 
-label {
-  display: block;
-  margin-top: 12px;
-  font-size: 13px;
-  color: var(--muted);
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+function shuffleArray(array) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(cryptoRandom() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
 }
 
-input,
-select,
-button {
-  width: 100%;
-  padding: 11px 12px;
-  margin-top: 7px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  font-size: 15px;
+function getPromptForMode(mode) {
+  const isCharades = mode === "charades";
+  const sourceList = isCharades ? charadesPrompts : drawingPrompts;
+  const storageKey = isCharades ? "charadesBagV3" : "drawingBagV3";
+  let bag = isCharades ? charadesBag : drawingBag;
+
+  if (!Array.isArray(bag) || bag.length === 0) bag = shuffleArray(sourceList);
+
+  const word = bag.pop();
+
+  if (isCharades) {
+    charadesBag = bag;
+    localStorage.setItem(storageKey, JSON.stringify(charadesBag));
+  } else {
+    drawingBag = bag;
+    localStorage.setItem(storageKey, JSON.stringify(drawingBag));
+  }
+
+  return word;
 }
 
-input,
-select {
-  background: #0f1013;
-  color: var(--text);
+function setBackground(color) {
+  currentBgColor = color;
+  canvas.style.backgroundColor = color;
+  drawWrap.style.backgroundColor = color;
 }
 
-button {
-  background: var(--blue);
-  color: white;
-  font-weight: 900;
-  cursor: pointer;
+function clearDrawing() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-button:hover {
-  background: #1d4ed8;
+function updateTimerStyle() {
+  timerText.classList.remove("timer-ok", "timer-mid", "timer-danger");
+  drawWrap.classList.remove("mid-warning", "danger-warning");
+
+  if (!game.active || game.waitingForNext || game.solved) {
+    timerText.classList.add("timer-ok");
+    return;
+  }
+
+  if (game.secondsLeft <= game.roundSeconds * 0.25) {
+    timerText.classList.add("timer-danger");
+    drawWrap.classList.add("danger-warning");
+  } else if (game.secondsLeft <= game.roundSeconds * 0.5) {
+    timerText.classList.add("timer-mid");
+    drawWrap.classList.add("mid-warning");
+  } else {
+    timerText.classList.add("timer-ok");
+  }
 }
 
-hr {
-  border: none;
-  border-top: 1px solid var(--border);
-  margin: 18px 0;
+function updateUI() {
+  roundText.textContent = `ROUND ${game.round}/${game.totalRounds}`;
+  timerText.textContent = formatTime(game.secondsLeft);
+  secretWord.textContent = game.answer || "---";
+
+  if (game.mode === "charades") {
+    showElement(charadesBox);
+    canvas.classList.add("hidden");
+  } else {
+    hideElement(charadesBox);
+    canvas.classList.remove("hidden");
+  }
+
+  updateTimerStyle();
+  renderHostLeaderboard();
 }
 
-#secretWord {
-  background: #0f1013;
-  border: 1px solid var(--border);
-  color: #22c55e;
-  font-size: 30px;
-  font-weight: 950;
-  text-align: center;
-  padding: 12px;
-  border-radius: 12px;
-  text-transform: uppercase;
+function startGame() {
+  game.mode = modeInput.value;
+  game.totalRounds = Number(roundCountInput.value);
+  game.roundSeconds = Number(timerSecondsInput.value);
+  game.round = 0;
+  game.active = true;
+  game.solved = false;
+  game.waitingForNext = false;
+  game.sessionScores = {};
+
+  hideElement(finalLeaderboard);
+  hideElement(winnerPopup);
+  hideElement(timesUpPopup);
+
+  nextRound();
 }
 
-.preset-grid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 8px;
-  margin-top: 8px;
+function nextRound() {
+  if (!game.active) return;
+
+  if (game.round >= game.totalRounds) {
+    endGame(true);
+    return;
+  }
+
+  game.round++;
+  game.solved = false;
+  game.waitingForNext = false;
+  game.secondsLeft = game.roundSeconds;
+
+  const custom = customWordInput.value.trim();
+  game.answer = custom || getPromptForMode(game.mode);
+  customWordInput.value = "";
+
+  clearDrawing();
+  hideElement(winnerPopup);
+  hideElement(timesUpPopup);
+  hideElement(finalLeaderboard);
+
+  startTimer();
+  updateUI();
 }
 
-.preset {
-  height: 36px;
-  padding: 0;
-  border-radius: 9px;
-  border: 2px solid #3f3f46;
-  cursor: pointer;
+function startTimer() {
+  clearInterval(game.timer);
+
+  game.timer = setInterval(() => {
+    if (!game.active || game.solved || game.waitingForNext) return;
+
+    game.secondsLeft -= 1;
+
+    if (game.secondsLeft <= 0) {
+      game.secondsLeft = 0;
+      game.solved = true;
+      game.waitingForNext = true;
+      clearInterval(game.timer);
+      showNoWinner();
+    }
+
+    updateUI();
+  }, 1000);
 }
 
-.preset.active {
-  border: 3px solid white;
-  outline: 2px solid var(--blue);
+function calculatePoints() {
+  const basePoints = 100;
+  const timeBonus = Math.ceil((game.secondsLeft / game.roundSeconds) * 100);
+  return basePoints + timeBonus;
 }
 
-.stream-area {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+function handleGuess(username, message) {
+  if (!game.active || game.solved || game.waitingForNext || !game.answer) return;
+
+  const cleanUsername = censorUsername(username);
+  const guess = normalize(message);
+  const answer = normalize(game.answer);
+
+  if (guess === answer) {
+    game.solved = true;
+    game.waitingForNext = true;
+    clearInterval(game.timer);
+
+    const points = calculatePoints();
+    game.sessionScores[cleanUsername] = (game.sessionScores[cleanUsername] || 0) + points;
+
+    showWinner(cleanUsername, points);
+    updateUI();
+  }
 }
 
-.stream-card {
-  width: 600px;
-  height: 640px;
-  background: #111114;
-  border: 1px solid #303039;
-  border-radius: 22px;
-  padding: 14px;
-  position: relative;
+function showWinner(username, points) {
+  winnerAnswer.textContent = game.answer;
+  winnerName.textContent = `@${username}`;
+  winnerPoints.textContent = `GOT IT FIRST! +${points} POINTS`;
+
+  hideElement(timesUpPopup);
+  showElement(winnerPopup);
 }
 
-.topbar {
-  height: 60px;
-  background: #1a1b20;
-  border: 1px solid #32333a;
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 18px;
-  font-size: 28px;
-  font-weight: 950;
-  letter-spacing: 0.02em;
+function showNoWinner() {
+  timesUpAnswer.textContent = game.answer;
+
+  hideElement(winnerPopup);
+  showElement(timesUpPopup);
+  updateUI();
 }
 
-#timerText {
-  padding: 6px 14px;
-  border-radius: 12px;
-  min-width: 104px;
-  text-align: center;
+function endGame(showFinal) {
+  game.active = false;
+  game.waitingForNext = false;
+  clearInterval(game.timer);
+
+  if (showFinal) showFinalLeaderboard();
+
+  updateUI();
 }
 
-.timer-ok {
-  color: white;
-  background: var(--green);
+function getSessionLeaderboard() {
+  return Object.entries(game.sessionScores)
+    .sort((a, b) => b[1] - a[1])
+    .map(([username, points]) => ({ username, points }));
 }
 
-.timer-mid {
-  color: #111;
-  background: var(--yellow);
-  animation: timerPulse 0.65s infinite alternate;
+function showFinalLeaderboard() {
+  const rows = getSessionLeaderboard();
+  finalLeaderboard.innerHTML = `<h1>FINAL LEADERBOARD</h1>`;
+
+  if (rows.length === 0) {
+    finalLeaderboard.innerHTML += `<div class="leader-row">No winners this game</div>`;
+  } else {
+    rows.forEach((row, index) => {
+      finalLeaderboard.innerHTML += `
+        <div class="leader-row">
+          <span>${index + 1}. @${row.username}</span>
+          <span>${row.points}</span>
+        </div>
+      `;
+    });
+  }
+
+  showElement(finalLeaderboard, "block");
 }
 
-.timer-danger {
-  color: white;
-  background: var(--red);
-  animation: timerDanger 0.28s infinite alternate;
+function renderHostLeaderboard() {
+  const rows = getSessionLeaderboard();
+  hostLeaderboard.innerHTML = "";
+
+  rows.forEach((row, index) => {
+    const div = document.createElement("div");
+    div.className = "host-leader-row";
+    div.innerHTML = `<span>${index + 1}. @${row.username}</span><b>${row.points}</b>`;
+    hostLeaderboard.appendChild(div);
+  });
 }
 
-@keyframes timerPulse {
-  from { transform: scale(1); }
-  to { transform: scale(1.08); }
+function getCanvasPos(e) {
+  const rect = canvas.getBoundingClientRect();
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+  return {
+    x: ((clientX - rect.left) / rect.width) * canvas.width,
+    y: ((clientY - rect.top) / rect.height) * canvas.height
+  };
 }
 
-@keyframes timerDanger {
-  from { transform: scale(1.05) rotate(-1deg); }
-  to { transform: scale(1.22) rotate(1deg); }
+function drawLine(x1, y1, x2, y2) {
+  ctx.strokeStyle = eraser ? currentBgColor : currentBrushColor;
+  ctx.lineWidth = Number(brushSize.value);
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.stroke();
 }
 
-.draw-wrap {
-  position: relative;
-  margin-top: 14px;
-  width: 100%;
-  height: 520px;
-  background: #ffffff;
-  border: 1px solid #303039;
-  border-radius: 18px;
-  overflow: hidden;
+function startDrawing(e) {
+  if (game.mode === "charades") return;
+  drawing = true;
+  const pos = getCanvasPos(e);
+  lastX = pos.x;
+  lastY = pos.y;
 }
 
-.draw-wrap.mid-warning {
-  border: 4px solid var(--yellow);
+function moveDrawing(e) {
+  if (!drawing || game.mode === "charades") return;
+  e.preventDefault();
+  const pos = getCanvasPos(e);
+  drawLine(lastX, lastY, pos.x, pos.y);
+  lastX = pos.x;
+  lastY = pos.y;
 }
 
-.draw-wrap.danger-warning {
-  border: 4px solid var(--red);
-  animation: borderFlash 0.28s infinite alternate;
+function stopDrawing() {
+  drawing = false;
 }
 
-@keyframes borderFlash {
-  from { box-shadow: inset 0 0 0 0 rgba(220, 38, 38, 0); }
-  to { box-shadow: inset 0 0 0 14px rgba(220, 38, 38, 0.65); }
+function connectTikFinity() {
+  connectionStatus.textContent = "Connecting...";
+
+  try {
+    ws = new WebSocket("ws://127.0.0.1:21213/");
+
+    ws.onopen = () => connectionStatus.textContent = "Connected to TikFinity";
+    ws.onclose = () => connectionStatus.textContent = "Disconnected";
+    ws.onerror = () => connectionStatus.textContent = "Connection error. Is TikFinity open?";
+
+    ws.onmessage = event => {
+      try {
+        const data = JSON.parse(event.data);
+        const chat = extractChat(data);
+        if (chat) handleGuess(chat.username, chat.message);
+      } catch (err) {
+        console.log("TikFinity parse error:", err);
+      }
+    };
+  } catch (err) {
+    connectionStatus.textContent = "Failed to connect";
+  }
 }
 
-canvas {
-  width: 100%;
-  height: 100%;
-  display: block;
-  cursor: crosshair;
-  touch-action: none;
-  background: #ffffff;
+function extractChat(data) {
+  const possibleMessage =
+    data.comment || data.message || data.text || data.msg ||
+    data.data?.comment || data.data?.message || data.data?.text ||
+    data.event?.comment || data.event?.message;
+
+  const possibleUsername =
+    data.uniqueId || data.username || data.user || data.nickname ||
+    data.data?.uniqueId || data.data?.username || data.data?.nickname ||
+    data.event?.uniqueId || data.event?.username;
+
+  const type = String(
+    data.type || data.eventType || data.event || data.name ||
+    data.data?.type || data.data?.eventType || ""
+  ).toLowerCase();
+
+  if ((type.includes("chat") || type.includes("comment") || possibleMessage) && possibleMessage && possibleUsername) {
+    return { username: possibleUsername, message: possibleMessage };
+  }
+
+  return null;
 }
 
-.charades {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, #18181c, #0b0b0d);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 18px;
-  text-align: center;
-  padding: 34px;
+function setPresetActive(container, clicked) {
+  container.querySelectorAll(".preset").forEach(btn => btn.classList.remove("active"));
+  clicked.classList.add("active");
 }
 
-.charades-title {
-  font-size: 48px;
-  font-weight: 950;
-}
+document.querySelectorAll("#brushPresets .preset").forEach(button => {
+  button.onclick = () => {
+    setPresetActive(document.getElementById("brushPresets"), button);
+    currentBrushColor = button.dataset.color;
+    brushColor.value = currentBrushColor;
+    eraser = false;
+    eraserBtn.textContent = "Eraser Off";
+  };
+});
 
-.charades-subtitle {
-  font-size: 28px;
-  line-height: 1.25;
-  color: #00ff88;
-  font-weight: 900;
-}
+document.querySelectorAll("#bgPresets .preset").forEach(button => {
+  button.onclick = () => {
+    setPresetActive(document.getElementById("bgPresets"), button);
+    bgColor.value = button.dataset.color;
+    setBackground(button.dataset.color);
+  };
+});
 
-.winner,
-.timesup {
-  position: absolute;
-  inset: 0;
-  color: white;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 18px;
-  font-weight: 950;
-  text-align: center;
-  z-index: 999;
-  padding: 22px;
-}
+connectBtn.onclick = connectTikFinity;
 
-.winner {
-  background: linear-gradient(180deg, #16a34a, #052e16);
-}
+randomWordBtn.onclick = () => {
+  customWordInput.value = getPromptForMode(modeInput.value);
+};
 
-.timesup {
-  background: linear-gradient(180deg, #ef4444, #450a0a);
-}
+startGameBtn.onclick = startGame;
+nextRoundBtn.onclick = nextRound;
+endGameBtn.onclick = () => endGame(true);
 
-.popup-label {
-  font-size: 25px;
-  letter-spacing: 0.08em;
-  color: rgba(255,255,255,0.85);
-}
+clearBtn.onclick = clearDrawing;
 
-.popup-answer {
-  font-size: 64px;
-  text-transform: uppercase;
-  line-height: 1;
-  max-width: 96%;
-  overflow-wrap: anywhere;
-  color: white;
-}
+eraserBtn.onclick = () => {
+  eraser = !eraser;
+  eraserBtn.textContent = eraser ? "Eraser On" : "Eraser Off";
+};
 
-.winner-card,
-.answer-card {
-  background: rgba(0,0,0,0.35);
-  border: 2px solid rgba(255,255,255,0.22);
-  border-radius: 20px;
-  padding: 18px 24px;
-  width: 92%;
-}
+brushColor.oninput = () => {
+  currentBrushColor = brushColor.value;
+  eraser = false;
+  eraserBtn.textContent = "Eraser Off";
+};
 
-.winner-user {
-  font-size: 42px;
-  overflow-wrap: anywhere;
-}
+bgColor.oninput = () => {
+  setBackground(bgColor.value);
+};
 
-.winner-points {
-  font-size: 30px;
-  margin-top: 8px;
-  color: #bbf7d0;
-}
+applyBgBtn.onclick = () => {
+  setBackground(bgColor.value);
+};
 
-.timesup-title {
-  background: white;
-  color: #b91c1c;
-  padding: 10px 26px;
-  border-radius: 18px;
-  font-size: 58px;
-  line-height: 1;
-}
+document.getElementById("testGuessBtn").onclick = () => {
+  const username = document.getElementById("testUsername").value.trim() || "testuser";
+  const guess = document.getElementById("testGuess").value.trim();
+  handleGuess(username, guess);
+};
 
-.no-one {
-  background: #111;
-  color: white;
-  padding: 12px 24px;
-  border-radius: 18px;
-  font-size: 36px;
-  border: 2px solid rgba(255,255,255,0.2);
-}
+canvas.addEventListener("mousedown", startDrawing);
+canvas.addEventListener("mousemove", moveDrawing);
+canvas.addEventListener("mouseup", stopDrawing);
+canvas.addEventListener("mouseleave", stopDrawing);
 
-.final {
-  position: absolute;
-  inset: 14px;
-  background: #0b0b0d;
-  border: 1px solid #3f3f46;
-  border-radius: 18px;
-  padding: 18px;
-  z-index: 20;
-  text-align: center;
-  overflow-y: auto;
-}
+canvas.addEventListener("touchstart", startDrawing);
+canvas.addEventListener("touchmove", moveDrawing);
+canvas.addEventListener("touchend", stopDrawing);
 
-.final h1 {
-  margin-top: 0;
-  font-size: 34px;
-}
-
-.leader-row,
-.host-leader-row {
-  display: flex;
-  justify-content: space-between;
-  background: #1c1c21;
-  border: 1px solid #303039;
-  margin: 6px 0;
-  padding: 10px;
-  border-radius: 10px;
-  font-weight: 800;
-}
-
-.leader-row {
-  font-size: 22px;
-}
-
-.host-leader-row {
-  font-size: 14px;
-}
-
-.hidden {
-  display: none !important;
-}
+setBackground(currentBgColor);
+hideElement(winnerPopup);
+hideElement(timesUpPopup);
+hideElement(finalLeaderboard);
+hideElement(charadesBox);
+updateUI();
