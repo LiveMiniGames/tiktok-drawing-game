@@ -1,1 +1,209 @@
+* {
+  box-sizing: border-box;
+}
 
+body {
+  margin: 0;
+  background: #080808;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+.app {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  height: 100vh;
+}
+
+.controls {
+  width: 360px;
+  background: #171717;
+  border: 2px solid #333;
+  border-radius: 14px;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.controls h1 {
+  margin-top: 0;
+  font-size: 26px;
+}
+
+.controls h2 {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+input, select, button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  border-radius: 8px;
+  border: none;
+  font-size: 15px;
+}
+
+button {
+  background: #7c3cff;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.85;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #333;
+  margin: 16px 0;
+}
+
+#secretWord {
+  background: #000;
+  color: #00ff88;
+  font-size: 32px;
+  font-weight: bold;
+  text-align: center;
+  padding: 12px;
+  border-radius: 10px;
+}
+
+.stream-area {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stream-card {
+  width: 600px;
+  height: 640px;
+  background: #111;
+  border: 4px solid #222;
+  border-radius: 18px;
+  padding: 14px;
+  position: relative;
+}
+
+.topbar {
+  height: 58px;
+  background: #1d1d1d;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  font-size: 28px;
+  font-weight: 900;
+}
+
+.draw-wrap {
+  position: relative;
+  margin-top: 14px;
+  width: 100%;
+  height: 520px;
+  background: #050505;
+  border: 4px solid #333;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+canvas {
+  width: 100%;
+  height: 100%;
+  background: #050505;
+  display: block;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.charades {
+  position: absolute;
+  inset: 0;
+  background: #050505;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  font-weight: 900;
+  text-align: center;
+}
+
+.winner {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 255, 136, 0.96);
+  color: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  font-weight: 900;
+  text-align: center;
+  z-index: 10;
+}
+
+.winner div:first-child {
+  font-size: 34px;
+}
+
+#winnerAnswer {
+  font-size: 58px;
+  text-transform: uppercase;
+}
+
+#winnerName {
+  font-size: 38px;
+}
+
+.final {
+  position: absolute;
+  inset: 14px;
+  background: #080808;
+  border: 4px solid #00ff88;
+  border-radius: 16px;
+  padding: 18px;
+  z-index: 20;
+  text-align: center;
+  overflow-y: auto;
+}
+
+.final h1 {
+  margin-top: 0;
+  font-size: 34px;
+  color: #00ff88;
+}
+
+.leader-row {
+  display: flex;
+  justify-content: space-between;
+  background: #222;
+  margin: 6px 0;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.host-leader-row {
+  display: flex;
+  justify-content: space-between;
+  background: #292929;
+  margin: 5px 0;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.hidden {
+  display: none !important;
+}
