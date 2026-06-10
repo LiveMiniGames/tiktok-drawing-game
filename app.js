@@ -19,11 +19,6 @@ const drawingNouns = [
   "present","stocking","snow globe","easter egg","bunny ears","firework","party hat","birthday cake","pinata","crown jewel","diamond","gold bar","safe","bank","jail cell","judge gavel","briefcase","wifi symbol","charger","router"
 ];
 
-const drawableAdjectives = [
-  "", "big", "tiny", "giant", "cartoon", "broken", "happy", "angry", "sleepy", "spooky",
-  "golden", "blue", "red", "green", "fancy", "old", "new", "floating", "melting", "exploding"
-];
-
 const charadesActions = [
   "running","jumping","walking","tiptoeing","marching","crawling","climbing","falling down","tripping","slipping","spinning","stretching","yawning","sleeping","waking up","sneezing","coughing","laughing","crying","shouting",
   "whispering","talking on phone","texting","taking a selfie","posing for a photo","checking watch","looking confused","looking scared","looking angry","looking excited","being shocked","being dizzy","being cold","being hot","being tired","hiding",
@@ -45,41 +40,11 @@ const charadesActions = [
   "watching scary movie","watching sports","falling asleep on couch","eating popcorn","cheering touchdown","doing touchdown dance","missing shot","celebrating goal","riding roller coaster","playing carnival game","eating cotton candy","chewing gum","jumping on trampoline","sliding down slide","swinging on swing","jumping in pool"
 ];
 
-const actionStyles = [
-  "", "slowly", "quickly", "dramatically", "silently", "badly", "carefully", "angrily", "excitedly", "like a pro"
-];
+const drawingPrompts = drawingNouns;
+const charadesPrompts = charadesActions;
 
-function expandDrawingPrompts() {
-  const result = new Set(drawingNouns);
-
-  for (const adjective of drawableAdjectives) {
-    for (const noun of drawingNouns) {
-      if (adjective) result.add(`${adjective} ${noun}`);
-      if (result.size >= 520) return [...result];
-    }
-  }
-
-  return [...result];
-}
-
-function expandCharadesPrompts() {
-  const result = new Set(charadesActions);
-
-  for (const style of actionStyles) {
-    for (const action of charadesActions) {
-      if (style) result.add(`${style} ${action}`);
-      if (result.size >= 520) return [...result];
-    }
-  }
-
-  return [...result];
-}
-
-const drawingPrompts = expandDrawingPrompts();
-const charadesPrompts = expandCharadesPrompts();
-
-let drawingBag = JSON.parse(localStorage.getItem("drawingBagV2") || "[]");
-let charadesBag = JSON.parse(localStorage.getItem("charadesBagV2") || "[]");
+let drawingBag = JSON.parse(localStorage.getItem("drawingBagV5") || "[]");
+let charadesBag = JSON.parse(localStorage.getItem("charadesBagV5") || "[]");
 
 let game = {
   active: false,
@@ -194,7 +159,7 @@ function shuffleArray(array) {
 function getPromptForMode(mode) {
   const isCharades = mode === "charades";
   const sourceList = isCharades ? charadesPrompts : drawingPrompts;
-  const storageKey = isCharades ? "charadesBagV2" : "drawingBagV2";
+  const storageKey = isCharades ? "charadesBagV5" : "drawingBagV5";
   let bag = isCharades ? charadesBag : drawingBag;
 
   if (!Array.isArray(bag) || bag.length === 0) {
@@ -424,7 +389,7 @@ function getCanvasPos(e) {
   const clientX = e.touches ? e.touches[0].clientX : e.clientX;
   const clientY = e.touches ? e.touches[0].clientY : e.clientY;
 
-    return {
+  return {
     x: ((clientX - rect.left) / rect.width) * canvas.width,
     y: ((clientY - rect.top) / rect.height) * canvas.height
   };
