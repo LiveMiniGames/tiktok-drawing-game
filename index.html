@@ -6,11 +6,11 @@
 </head>
 <body>
   <div class="app">
-    <div class="controls">
+    <aside class="controls">
       <h1>Host Controls</h1>
 
       <button id="connectBtn">Connect TikFinity</button>
-      <div id="connectionStatus">Not connected</div>
+      <div id="connectionStatus" class="status">Not connected</div>
 
       <hr>
 
@@ -35,7 +35,7 @@
       </select>
 
       <label>Custom Word</label>
-      <input id="customWord" placeholder="Streamer can type any word here">
+      <input id="customWord" placeholder="Optional custom word">
 
       <button id="randomWordBtn">Get Random Word</button>
       <button id="startGameBtn">Start Game</button>
@@ -47,22 +47,47 @@
 
       <hr>
 
-      <label>Brush Presets</label>
-      <div class="color-presets" id="brushPresets"></div>
+      <label>Brush Color Presets</label>
+      <div class="preset-grid" id="brushPresets">
+        <button class="preset active" data-type="brush" data-color="#ffffff" style="background:#ffffff"></button>
+        <button class="preset" data-type="brush" data-color="#111111" style="background:#111111"></button>
+        <button class="preset" data-type="brush" data-color="#ef4444" style="background:#ef4444"></button>
+        <button class="preset" data-type="brush" data-color="#f97316" style="background:#f97316"></button>
+        <button class="preset" data-type="brush" data-color="#facc15" style="background:#facc15"></button>
+        <button class="preset" data-type="brush" data-color="#22c55e" style="background:#22c55e"></button>
+        <button class="preset" data-type="brush" data-color="#06b6d4" style="background:#06b6d4"></button>
+        <button class="preset" data-type="brush" data-color="#3b82f6" style="background:#3b82f6"></button>
+        <button class="preset" data-type="brush" data-color="#8b5cf6" style="background:#8b5cf6"></button>
+        <button class="preset" data-type="brush" data-color="#ec4899" style="background:#ec4899"></button>
+        <button class="preset" data-type="brush" data-color="#a16207" style="background:#a16207"></button>
+        <button class="preset" data-type="brush" data-color="#94a3b8" style="background:#94a3b8"></button>
+      </div>
 
       <label>Custom Brush Color</label>
       <input type="color" id="brushColor" value="#ffffff">
 
-      <label>Background Presets</label>
-      <div class="color-presets" id="bgPresets"></div>
+      <label>Background Color Presets</label>
+      <div class="preset-grid" id="bgPresets">
+        <button class="preset active" data-type="bg" data-color="#0f172a" style="background:#0f172a"></button>
+        <button class="preset" data-type="bg" data-color="#000000" style="background:#000000"></button>
+        <button class="preset" data-type="bg" data-color="#ffffff" style="background:#ffffff"></button>
+        <button class="preset" data-type="bg" data-color="#1e293b" style="background:#1e293b"></button>
+        <button class="preset" data-type="bg" data-color="#14532d" style="background:#14532d"></button>
+        <button class="preset" data-type="bg" data-color="#7f1d1d" style="background:#7f1d1d"></button>
+        <button class="preset" data-type="bg" data-color="#422006" style="background:#422006"></button>
+        <button class="preset" data-type="bg" data-color="#312e81" style="background:#312e81"></button>
+        <button class="preset" data-type="bg" data-color="#fef3c7" style="background:#fef3c7"></button>
+        <button class="preset" data-type="bg" data-color="#dbeafe" style="background:#dbeafe"></button>
+        <button class="preset" data-type="bg" data-color="#fce7f3" style="background:#fce7f3"></button>
+        <button class="preset" data-type="bg" data-color="#dcfce7" style="background:#dcfce7"></button>
+      </div>
 
       <label>Custom Background Color</label>
-      <input type="color" id="bgColor" value="#050505">
-
+      <input type="color" id="bgColor" value="#0f172a">
       <button id="applyBgBtn">Apply Background</button>
 
       <label>Brush Size</label>
-      <input type="range" id="brushSize" min="2" max="40" value="8">
+      <input type="range" id="brushSize" min="2" max="44" value="8">
 
       <button id="eraserBtn">Eraser Off</button>
       <button id="clearBtn">Clear Drawing</button>
@@ -78,41 +103,42 @@
 
       <h2>Session Leaderboard</h2>
       <div id="hostLeaderboard"></div>
-    </div>
+    </aside>
 
-    <div class="stream-area">
-      <div class="stream-card">
+    <main class="stream-area">
+      <section class="stream-card" id="streamCard">
         <div class="topbar">
           <div id="roundText">ROUND 0/0</div>
-          <div id="timerText">0:00</div>
+          <div id="timerText" class="timer-ok">0:00</div>
         </div>
 
         <div class="draw-wrap" id="drawWrap">
           <canvas id="canvas" width="520" height="420"></canvas>
 
           <div id="charadesBox" class="charades hidden">
-            <div class="charades-title">🎭 CHARADES ROUND</div>
-            <div class="charades-subtitle">The streamer acts it out. Chat guesses the answer!</div>
+            <div class="charades-kicker">CHARADES ROUND</div>
+            <div class="charades-title">Act It Out</div>
+            <div class="charades-subtitle">Chat guesses the answer in TikTok chat</div>
           </div>
 
           <div id="winnerPopup" class="winner hidden">
-            <div class="small-label">CORRECT ANSWER:</div>
-            <div id="winnerAnswer">---</div>
-            <div id="winnerName">@---</div>
-            <div id="winnerPoints">GOT IT FIRST!</div>
+            <div class="popup-label">CORRECT ANSWER:</div>
+            <div id="winnerAnswer" class="popup-answer">---</div>
+            <div id="winnerName" class="winner-user">@---</div>
+            <div id="winnerPoints" class="winner-points">GOT IT FIRST!</div>
           </div>
 
           <div id="timesUpPopup" class="timesup hidden">
             <div class="timesup-title">TIME'S UP!</div>
-            <div class="small-label">CORRECT ANSWER:</div>
-            <div id="timesUpAnswer">---</div>
+            <div class="popup-label">CORRECT ANSWER:</div>
+            <div id="timesUpAnswer" class="popup-answer">---</div>
             <div class="no-one">NO ONE GOT IT RIGHT!</div>
           </div>
         </div>
 
         <div id="finalLeaderboard" class="final hidden"></div>
-      </div>
-    </div>
+      </section>
+    </main>
   </div>
 
   <script src="app.js"></script>
