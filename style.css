@@ -4,7 +4,10 @@
 
 body {
   margin: 0;
-  background: #080808;
+  background:
+    radial-gradient(circle at top left, rgba(124, 60, 255, 0.22), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(0, 255, 136, 0.13), transparent 30%),
+    #070707;
   color: white;
   font-family: Arial, sans-serif;
 }
@@ -18,27 +21,38 @@ body {
 
 .controls {
   width: 360px;
-  background: #171717;
-  border: 2px solid #333;
-  border-radius: 14px;
+  background: rgba(18, 18, 24, 0.96);
+  border: 1px solid #333344;
+  border-radius: 18px;
   padding: 16px;
   overflow-y: auto;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.55);
 }
 
-input, select, button {
+.controls h1 {
+  margin-top: 0;
+}
+
+input,
+select,
+button {
   width: 100%;
   padding: 10px;
   margin-top: 6px;
-  border-radius: 8px;
+  border-radius: 10px;
   border: none;
   font-size: 15px;
 }
 
 button {
-  background: #7c3cff;
+  background: linear-gradient(135deg, #7c3cff, #00d4ff);
   color: white;
-  font-weight: bold;
+  font-weight: 900;
   cursor: pointer;
+}
+
+button:hover {
+  transform: scale(1.02);
 }
 
 hr {
@@ -51,24 +65,29 @@ hr {
   background: #000;
   color: #00ff88;
   font-size: 32px;
-  font-weight: bold;
+  font-weight: 900;
   text-align: center;
   padding: 12px;
-  border-radius: 10px;
+  border-radius: 12px;
 }
 
 .color-presets {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   gap: 8px;
   margin-top: 8px;
 }
 
 .color-dot {
-  height: 38px;
+  height: 36px;
   border: 3px solid #555;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
+}
+
+.color-dot.active {
+  border: 4px solid #00ff88;
+  box-shadow: 0 0 14px #00ff88;
 }
 
 .stream-area {
@@ -81,23 +100,59 @@ hr {
 .stream-card {
   width: 600px;
   height: 640px;
-  background: #111;
-  border: 4px solid #222;
-  border-radius: 18px;
+  background: linear-gradient(180deg, #18181f, #090909);
+  border: 4px solid #29293a;
+  border-radius: 22px;
   padding: 14px;
   position: relative;
+  box-shadow: 0 0 45px rgba(124, 60, 255, 0.35);
 }
 
 .topbar {
   height: 58px;
-  background: #1d1d1d;
-  border-radius: 12px;
+  background: linear-gradient(135deg, #232337, #111);
+  border: 1px solid #353552;
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 18px;
   font-size: 28px;
   font-weight: 900;
+}
+
+#timerText {
+  color: #00ff88;
+  text-shadow: 0 0 14px rgba(0, 255, 136, 0.8);
+}
+
+#timerText.warning {
+  color: #ff3030;
+  animation: timerPulse 0.45s infinite alternate;
+}
+
+.stream-card.warning {
+  animation: dangerShake 0.18s infinite;
+  box-shadow: 0 0 45px rgba(255, 0, 0, 0.9);
+}
+
+@keyframes timerPulse {
+  from {
+    transform: scale(1);
+    text-shadow: 0 0 10px red;
+  }
+  to {
+    transform: scale(1.22);
+    text-shadow: 0 0 28px red;
+  }
+}
+
+@keyframes dangerShake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  50% { transform: translateX(3px); }
+  75% { transform: translateX(-2px); }
+  100% { transform: translateX(0); }
 }
 
 .draw-wrap {
@@ -107,14 +162,28 @@ hr {
   height: 520px;
   background: #050505;
   border: 4px solid #333;
-  border-radius: 14px;
+  border-radius: 18px;
   overflow: hidden;
+}
+
+.draw-wrap.warning::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 10px solid rgba(255, 0, 0, 0.7);
+  pointer-events: none;
+  animation: warningFlash 0.35s infinite alternate;
+  z-index: 3;
+}
+
+@keyframes warningFlash {
+  from { opacity: 0.15; }
+  to { opacity: 1; }
 }
 
 canvas {
   width: 100%;
   height: 100%;
-  background: #050505;
   display: block;
   cursor: crosshair;
   touch-action: none;
@@ -123,33 +192,36 @@ canvas {
 .charades {
   position: absolute;
   inset: 0;
-  background: linear-gradient(160deg, #12002e, #000, #210044);
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.12), transparent 30%),
+    linear-gradient(160deg, #25005c, #08000f, #000);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 18px;
+  gap: 22px;
   text-align: center;
-  padding: 28px;
+  padding: 30px;
 }
 
 .charades-title {
-  font-size: 46px;
+  font-size: 48px;
   font-weight: 900;
-  color: #ffffff;
 }
 
 .charades-subtitle {
   font-size: 28px;
-  line-height: 1.2;
+  line-height: 1.25;
   color: #00ff88;
-  font-weight: 800;
+  font-weight: 900;
 }
 
 .winner {
   position: absolute;
   inset: 0;
-  background: linear-gradient(160deg, #00ff88, #00d4ff);
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.55), transparent 35%),
+    linear-gradient(135deg, #00ff88, #00d4ff);
   color: #000;
   display: flex;
   flex-direction: column;
@@ -160,6 +232,18 @@ canvas {
   text-align: center;
   z-index: 10;
   padding: 20px;
+  animation: popIn 0.25s ease-out;
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.82);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .small-label {
@@ -174,45 +258,26 @@ canvas {
   line-height: 1;
 }
 
-.tiktok-line {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  background: rgba(0,0,0,0.85);
-  color: white;
-  padding: 12px 22px;
-  border-radius: 18px;
-  max-width: 95%;
-}
-
-.tiktok-logo {
-  background: #000;
-  color: #25f4ee;
-  border: 3px solid #fe2c55;
-  width: 54px;
-  height: 54px;
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 34px;
-  font-weight: 900;
-}
-
 #winnerName {
-  font-size: 38px;
+  font-size: 42px;
+  background: #000;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 16px;
+  max-width: 95%;
   overflow-wrap: anywhere;
 }
 
-.got-first {
-  font-size: 36px;
+#winnerPoints {
+  font-size: 34px;
 }
 
 .timesup {
   position: absolute;
   inset: 0;
-  background: linear-gradient(160deg, #ff0000, #450000);
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.2), transparent 25%),
+    linear-gradient(160deg, #ff1a1a, #670000, #120000);
   color: white;
   display: flex;
   flex-direction: column;
@@ -223,6 +288,16 @@ canvas {
   text-align: center;
   z-index: 11;
   padding: 20px;
+  animation: redAlert 0.45s infinite alternate;
+}
+
+@keyframes redAlert {
+  from {
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.2);
+  }
+  to {
+    box-shadow: inset 0 0 80px rgba(255, 0, 0, 1);
+  }
 }
 
 .timesup-title {
@@ -236,9 +311,11 @@ canvas {
 .final {
   position: absolute;
   inset: 14px;
-  background: #080808;
+  background:
+    radial-gradient(circle at top, rgba(0, 255, 136, 0.14), transparent 30%),
+    #070707;
   border: 4px solid #00ff88;
-  border-radius: 16px;
+  border-radius: 18px;
   padding: 18px;
   z-index: 20;
   text-align: center;
@@ -247,17 +324,17 @@ canvas {
 
 .final h1 {
   margin-top: 0;
-  font-size: 34px;
+  font-size: 36px;
   color: #00ff88;
 }
 
 .leader-row {
   display: flex;
   justify-content: space-between;
-  background: #222;
+  background: #1d1d24;
   margin: 6px 0;
   padding: 10px;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 22px;
   font-weight: bold;
 }
