@@ -6,7 +6,6 @@
 </head>
 <body>
   <div class="app">
-
     <div class="controls">
       <h1>Host Controls</h1>
 
@@ -36,9 +35,9 @@
       </select>
 
       <label>Custom Word</label>
-      <input id="customWord" placeholder="Type custom word">
+      <input id="customWord" placeholder="Streamer can type any word here">
 
-      <button id="randomWordBtn">Random Word</button>
+      <button id="randomWordBtn">Get Random Word</button>
       <button id="startGameBtn">Start Game</button>
       <button id="nextRoundBtn">Next Round</button>
       <button id="endGameBtn">End Game</button>
@@ -48,24 +47,22 @@
 
       <hr>
 
-      <label>Preset Colors</label>
-      <div class="color-presets">
-        <button class="color-dot" data-color="#ffffff" style="background:#ffffff"></button>
-        <button class="color-dot" data-color="#ff0000" style="background:#ff0000"></button>
-        <button class="color-dot" data-color="#00ff66" style="background:#00ff66"></button>
-        <button class="color-dot" data-color="#0099ff" style="background:#0099ff"></button>
-        <button class="color-dot" data-color="#ffff00" style="background:#ffff00"></button>
-        <button class="color-dot" data-color="#ff7b00" style="background:#ff7b00"></button>
-        <button class="color-dot" data-color="#b300ff" style="background:#b300ff"></button>
-        <button class="color-dot" data-color="#ff4fd8" style="background:#ff4fd8"></button>
-        <button class="color-dot" data-color="#000000" style="background:#000000"></button>
-      </div>
+      <label>Brush Presets</label>
+      <div class="color-presets" id="brushPresets"></div>
 
-      <label>Custom Color</label>
+      <label>Custom Brush Color</label>
       <input type="color" id="brushColor" value="#ffffff">
 
+      <label>Background Presets</label>
+      <div class="color-presets" id="bgPresets"></div>
+
+      <label>Custom Background Color</label>
+      <input type="color" id="bgColor" value="#050505">
+
+      <button id="applyBgBtn">Apply Background</button>
+
       <label>Brush Size</label>
-      <input type="range" id="brushSize" min="2" max="35" value="8">
+      <input type="range" id="brushSize" min="2" max="40" value="8">
 
       <button id="eraserBtn">Eraser Off</button>
       <button id="clearBtn">Clear Drawing</button>
@@ -90,36 +87,32 @@
           <div id="timerText">0:00</div>
         </div>
 
-        <div class="draw-wrap">
+        <div class="draw-wrap" id="drawWrap">
           <canvas id="canvas" width="520" height="420"></canvas>
 
           <div id="charadesBox" class="charades hidden">
             <div class="charades-title">🎭 CHARADES ROUND</div>
-            <div class="charades-subtitle">Streamer acts it out. Chat guesses the answer!</div>
+            <div class="charades-subtitle">The streamer acts it out. Chat guesses the answer!</div>
           </div>
 
           <div id="winnerPopup" class="winner hidden">
             <div class="small-label">CORRECT ANSWER:</div>
             <div id="winnerAnswer">---</div>
-            <div class="tiktok-line">
-              <span class="tiktok-logo">♪</span>
-              <span id="winnerName">---</span>
-            </div>
-            <div class="got-first">GOT IT FIRST!</div>
+            <div id="winnerName">@---</div>
+            <div id="winnerPoints">GOT IT FIRST!</div>
           </div>
 
           <div id="timesUpPopup" class="timesup hidden">
             <div class="timesup-title">TIME'S UP!</div>
             <div class="small-label">CORRECT ANSWER:</div>
             <div id="timesUpAnswer">---</div>
-            <div class="no-one">NO ONE GOT IT!</div>
+            <div class="no-one">NO ONE GOT IT RIGHT!</div>
           </div>
         </div>
 
         <div id="finalLeaderboard" class="final hidden"></div>
       </div>
     </div>
-
   </div>
 
   <script src="app.js"></script>
