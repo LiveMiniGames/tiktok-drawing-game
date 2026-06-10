@@ -424,7 +424,7 @@ function getCanvasPos(e) {
   const clientX = e.touches ? e.touches[0].clientX : e.clientX;
   const clientY = e.touches ? e.touches[0].clientY : e.clientY;
 
-  return {
+    return {
     x: ((clientX - rect.left) / rect.width) * canvas.width,
     y: ((clientY - rect.top) / rect.height) * canvas.height
   };
@@ -544,30 +544,35 @@ function extractChat(data) {
   return null;
 }
 
-function setActivePreset(type, clickedButton) {
-  const container = type === "brush" ? document.getElementById("brushPresets") : document.getElementById("bgPresets");
-  container.querySelectorAll(".preset").forEach(button => button.classList.remove("active"));
-  clickedButton.classList.add("active");
-}
-
-document.querySelectorAll(".preset").forEach(button => {
+document.querySelectorAll("#brushPresets .preset").forEach(button => {
   button.addEventListener("click", () => {
-    const type = button.dataset.type;
     const color = button.dataset.color;
 
-    setActivePreset(type, button);
+    document.querySelectorAll("#brushPresets .preset").forEach(btn => {
+      btn.classList.remove("active");
+    });
 
-    if (type === "brush") {
-      currentBrushColor = color;
-      brushColor.value = color;
-      eraser = false;
-      eraserBtn.textContent = "Eraser Off";
-    }
+    button.classList.add("active");
 
-    if (type === "bg") {
-      bgColor.value = color;
-      setBackground(color);
-    }
+    currentBrushColor = color;
+    brushColor.value = color;
+    eraser = false;
+    eraserBtn.textContent = "Eraser Off";
+  });
+});
+
+document.querySelectorAll("#bgPresets .preset").forEach(button => {
+  button.addEventListener("click", () => {
+    const color = button.dataset.color;
+
+    document.querySelectorAll("#bgPresets .preset").forEach(btn => {
+      btn.classList.remove("active");
+    });
+
+    button.classList.add("active");
+
+    bgColor.value = color;
+    setBackground(color);
   });
 });
 
