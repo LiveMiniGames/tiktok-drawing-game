@@ -5,147 +5,142 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="app">
-  <aside class="controls">
-    <h1>Host Controls</h1>
+  <div class="app">
+    <aside class="controls">
+      <h1>Host Controls</h1>
 
-    <button onclick="connectTikFinity()">Connect TikFinity</button>
-    <div id="connectionStatus" class="status">Not connected</div>
+      <button id="connectBtn" type="button">Connect TikFinity</button>
+      <div id="connectionStatus" class="status">Not connected</div>
 
-    <hr>
+      <hr>
 
-    <label>Mode</label>
-    <select id="mode">
-      <option value="drawing">Drawing</option>
-      <option value="charades">Charades</option>
-    </select>
+      <label>Mode</label>
+      <select id="mode">
+        <option value="drawing">Drawing</option>
+        <option value="charades">Charades</option>
+      </select>
 
-    <label>Rounds</label>
-    <select id="roundCount">
-      <option value="5">5 rounds</option>
-      <option value="10">10 rounds</option>
-      <option value="20">20 rounds</option>
-    </select>
+      <label>Rounds</label>
+      <select id="roundCount">
+        <option value="5">5 rounds</option>
+        <option value="10">10 rounds</option>
+        <option value="20">20 rounds</option>
+      </select>
 
-    <label>Timer</label>
-    <select id="timerSeconds">
-      <option value="30">30 seconds</option>
-      <option value="60">1 minute</option>
-      <option value="120">2 minutes</option>
-    </select>
+      <label>Timer</label>
+      <select id="timerSeconds">
+        <option value="30">30 seconds</option>
+        <option value="60">1 minute</option>
+        <option value="120">2 minutes</option>
+      </select>
 
-    <label>Custom Word</label>
-    <input id="customWord" placeholder="Optional custom word">
+      <label>Custom Word</label>
+      <input id="customWord" placeholder="Optional custom word">
 
-    <button onclick="pickRandomWord()">Get Random Word</button>
-    <button onclick="startGame()">Start Game</button>
-    <button onclick="nextRound()">Next Round</button>
-    <button onclick="endGame(true)">End Game</button>
+      <button id="randomWordBtn" type="button">Get Random Word</button>
+      <button id="startGameBtn" type="button">Start Game</button>
+      <button id="nextRoundBtn" type="button">Next Round</button>
+      <button id="endGameBtn" type="button">End Game</button>
 
-    <h2>Secret Word</h2>
-    <div id="secretWord">---</div>
+      <h2>Secret Word</h2>
+      <div id="secretWord">---</div>
 
-    <hr>
+      <hr>
 
-    <label>Brush Color Presets</label>
-    <div class="preset-grid">
-      <button class="preset active" onclick="setBrush('#ffffff', this)" style="background:#ffffff"></button>
-      <button class="preset" onclick="setBrush('#111111', this)" style="background:#111111"></button>
-      <button class="preset" onclick="setBrush('#ef4444', this)" style="background:#ef4444"></button>
-      <button class="preset" onclick="setBrush('#f97316', this)" style="background:#f97316"></button>
-      <button class="preset" onclick="setBrush('#facc15', this)" style="background:#facc15"></button>
-      <button class="preset" onclick="setBrush('#22c55e', this)" style="background:#22c55e"></button>
-      <button class="preset" onclick="setBrush('#06b6d4', this)" style="background:#06b6d4"></button>
-      <button class="preset" onclick="setBrush('#3b82f6', this)" style="background:#3b82f6"></button>
-      <button class="preset" onclick="setBrush('#8b5cf6', this)" style="background:#8b5cf6"></button>
-      <button class="preset" onclick="setBrush('#ec4899', this)" style="background:#ec4899"></button>
-      <button class="preset" onclick="setBrush('#a16207', this)" style="background:#a16207"></button>
-      <button class="preset" onclick="setBrush('#94a3b8', this)" style="background:#94a3b8"></button>
-    </div>
-
-    <label>Custom Brush Color</label>
-    <input type="color" id="brushColor" value="#ffffff">
-
-    <label>Background Color Presets</label>
-    <div class="preset-grid">
-      <button class="preset active" onclick="setBg('#ffffff', this)" style="background:#ffffff"></button>
-      <button class="preset" onclick="setBg('#111111', this)" style="background:#111111"></button>
-      <button class="preset" onclick="setBg('#ef4444', this)" style="background:#ef4444"></button>
-      <button class="preset" onclick="setBg('#f97316', this)" style="background:#f97316"></button>
-      <button class="preset" onclick="setBg('#facc15', this)" style="background:#facc15"></button>
-      <button class="preset" onclick="setBg('#22c55e', this)" style="background:#22c55e"></button>
-      <button class="preset" onclick="setBg('#06b6d4', this)" style="background:#06b6d4"></button>
-      <button class="preset" onclick="setBg('#3b82f6', this)" style="background:#3b82f6"></button>
-      <button class="preset" onclick="setBg('#8b5cf6', this)" style="background:#8b5cf6"></button>
-      <button class="preset" onclick="setBg('#ec4899', this)" style="background:#ec4899"></button>
-      <button class="preset" onclick="setBg('#a16207', this)" style="background:#a16207"></button>
-      <button class="preset" onclick="setBg('#94a3b8', this)" style="background:#94a3b8"></button>
-    </div>
-
-    <label>Custom Background Color</label>
-    <input type="color" id="bgColor" value="#ffffff">
-    <button onclick="applyCustomBg()">Apply Background</button>
-
-    <label>Brush Size</label>
-    <input type="range" id="brushSize" min="2" max="44" value="8">
-
-    <button onclick="toggleEraser()" id="eraserBtn">Eraser Off</button>
-    <button onclick="clearDrawing()">Clear Drawing</button>
-
-    <hr>
-
-    <h2>Test Guess</h2>
-    <input id="testUsername" placeholder="username">
-    <input id="testGuess" placeholder="guess">
-    <button onclick="sendTestGuess()">Send Test Guess</button>
-
-    <hr>
-
-    <h2>Session Leaderboard</h2>
-    <div id="hostLeaderboard"></div>
-  </aside>
-
-  <main class="stream-area">
-    <section class="stream-card">
-      <div class="topbar">
-        <div id="roundText">ROUND 0/0</div>
-        <div id="timerText" class="timer-ok">0:00</div>
+      <label>Brush Color Presets</label>
+      <div class="preset-grid" id="brushPresets">
+        <button type="button" class="preset active" data-color="#ffffff" style="background:#ffffff"></button>
+        <button type="button" class="preset" data-color="#111111" style="background:#111111"></button>
+        <button type="button" class="preset" data-color="#ef4444" style="background:#ef4444"></button>
+        <button type="button" class="preset" data-color="#f97316" style="background:#f97316"></button>
+        <button type="button" class="preset" data-color="#facc15" style="background:#facc15"></button>
+        <button type="button" class="preset" data-color="#22c55e" style="background:#22c55e"></button>
+        <button type="button" class="preset" data-color="#06b6d4" style="background:#06b6d4"></button>
+        <button type="button" class="preset" data-color="#3b82f6" style="background:#3b82f6"></button>
+        <button type="button" class="preset" data-color="#8b5cf6" style="background:#8b5cf6"></button>
+        <button type="button" class="preset" data-color="#ec4899" style="background:#ec4899"></button>
+        <button type="button" class="preset" data-color="#a16207" style="background:#a16207"></button>
+        <button type="button" class="preset" data-color="#94a3b8" style="background:#94a3b8"></button>
       </div>
 
-      <div class="draw-wrap" id="drawWrap">
-        <canvas id="canvas" width="520" height="420"></canvas>
+      <label>Custom Brush Color</label>
+      <input type="color" id="brushColor" value="#ffffff">
 
-        <div id="charadesBox" class="charades hidden">
-          <div class="charades-title">🎭 CHARADES ROUND</div>
-          <div class="charades-subtitle">Streamer acts it out. Chat guesses the answer!</div>
+      <label>Background Color Presets</label>
+      <div class="preset-grid" id="bgPresets">
+        <button type="button" class="preset active" data-color="#0f172a" style="background:#0f172a"></button>
+        <button type="button" class="preset" data-color="#000000" style="background:#000000"></button>
+        <button type="button" class="preset" data-color="#ffffff" style="background:#ffffff"></button>
+        <button type="button" class="preset" data-color="#1e293b" style="background:#1e293b"></button>
+        <button type="button" class="preset" data-color="#14532d" style="background:#14532d"></button>
+        <button type="button" class="preset" data-color="#7f1d1d" style="background:#7f1d1d"></button>
+        <button type="button" class="preset" data-color="#422006" style="background:#422006"></button>
+        <button type="button" class="preset" data-color="#312e81" style="background:#312e81"></button>
+        <button type="button" class="preset" data-color="#fef3c7" style="background:#fef3c7"></button>
+        <button type="button" class="preset" data-color="#dbeafe" style="background:#dbeafe"></button>
+        <button type="button" class="preset" data-color="#fce7f3" style="background:#fce7f3"></button>
+        <button type="button" class="preset" data-color="#dcfce7" style="background:#dcfce7"></button>
+      </div>
+
+      <label>Custom Background Color</label>
+      <input type="color" id="bgColor" value="#0f172a">
+      <button id="applyBgBtn" type="button">Apply Background</button>
+
+      <label>Brush Size</label>
+      <input type="range" id="brushSize" min="2" max="44" value="8">
+
+      <button id="eraserBtn" type="button">Eraser Off</button>
+      <button id="clearBtn" type="button">Clear Drawing</button>
+
+      <hr>
+
+      <h2>Test Guess</h2>
+      <input id="testUsername" placeholder="username">
+      <input id="testGuess" placeholder="guess">
+      <button id="testGuessBtn" type="button">Send Test Guess</button>
+
+      <hr>
+
+      <h2>Session Leaderboard</h2>
+      <div id="hostLeaderboard"></div>
+    </aside>
+
+    <main class="stream-area">
+      <section class="stream-card" id="streamCard">
+        <div class="topbar">
+          <div id="roundText">ROUND 0/0</div>
+          <div id="timerText" class="timer-ok">0:00</div>
         </div>
 
-        <div id="winnerPopup" class="popup-screen correct hidden">
-          <div class="popup-card">
-            <div class="popup-kicker">CORRECT ANSWER</div>
+        <div class="draw-wrap" id="drawWrap">
+          <canvas id="canvas" width="520" height="420"></canvas>
+
+          <div id="charadesBox" class="charades hidden">
+            <div class="charades-kicker">CHARADES ROUND</div>
+            <div class="charades-title">Act It Out</div>
+            <div class="charades-subtitle">Chat guesses the answer in TikTok chat</div>
+          </div>
+
+          <div id="winnerPopup" class="winner hidden">
+            <div class="popup-label">CORRECT ANSWER:</div>
             <div id="winnerAnswer" class="popup-answer">---</div>
+            <div id="winnerName" class="winner-user">@---</div>
+            <div id="winnerPoints" class="winner-points">GOT IT FIRST!</div>
           </div>
-          <div class="popup-card dark-card">
-            <div id="winnerName" class="popup-user">@---</div>
-            <div id="winnerPoints" class="popup-sub">GOT IT FIRST!</div>
-          </div>
-        </div>
 
-        <div id="timesUpPopup" class="popup-screen timeout hidden">
-          <div class="times-title">TIME'S UP!</div>
-          <div class="popup-card">
-            <div class="popup-kicker">CORRECT ANSWER</div>
+          <div id="timesUpPopup" class="timesup hidden">
+            <div class="timesup-title">TIME'S UP!</div>
+            <div class="popup-label">CORRECT ANSWER:</div>
             <div id="timesUpAnswer" class="popup-answer">---</div>
+            <div class="no-one">NO ONE GOT IT RIGHT!</div>
           </div>
-          <div class="no-one">NO ONE GOT IT RIGHT!</div>
         </div>
-      </div>
 
-      <div id="finalLeaderboard" class="final hidden"></div>
-    </section>
-  </main>
-</div>
+        <div id="finalLeaderboard" class="final hidden"></div>
+      </section>
+    </main>
+  </div>
 
-<script src="app.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
