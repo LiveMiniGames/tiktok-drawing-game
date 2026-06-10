@@ -1,1 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>TikTok Drawing Game</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
 
+    <div class="controls">
+      <h1>Host Controls</h1>
+
+      <button id="connectBtn">Connect TikFinity</button>
+      <div id="connectionStatus">Not connected</div>
+
+      <hr>
+
+      <label>Mode</label>
+      <select id="mode">
+        <option value="drawing">Drawing</option>
+        <option value="charades">Charades</option>
+      </select>
+
+      <label>Rounds</label>
+      <select id="roundCount">
+        <option value="5">5 rounds</option>
+        <option value="10">10 rounds</option>
+        <option value="20">20 rounds</option>
+      </select>
+
+      <label>Timer</label>
+      <select id="timerSeconds">
+        <option value="30">30 seconds</option>
+        <option value="60">1 minute</option>
+        <option value="120">2 minutes</option>
+      </select>
+
+      <label>Custom Word</label>
+      <input id="customWord" placeholder="Type custom word">
+
+      <button id="randomWordBtn">Random Word</button>
+      <button id="startGameBtn">Start Game</button>
+      <button id="nextRoundBtn">Next Round</button>
+      <button id="endGameBtn">End Game</button>
+
+      <h2>Secret Word</h2>
+      <div id="secretWord">---</div>
+
+      <hr>
+
+      <label>Brush Color</label>
+      <input type="color" id="brushColor" value="#ffffff">
+
+      <label>Brush Size</label>
+      <input type="range" id="brushSize" min="2" max="35" value="8">
+
+      <button id="eraserBtn">Eraser Off</button>
+      <button id="clearBtn">Clear Drawing</button>
+
+      <hr>
+
+      <h2>Test Guess</h2>
+      <input id="testUsername" placeholder="username">
+      <input id="testGuess" placeholder="guess">
+      <button id="testGuessBtn">Send Test Guess</button>
+
+      <hr>
+
+      <h2>Session Leaderboard</h2>
+      <div id="hostLeaderboard"></div>
+    </div>
+
+    <div class="stream-area">
+      <div class="stream-card" id="streamCard">
+        <div class="topbar">
+          <div id="roundText">ROUND 0/0</div>
+          <div id="timerText">0:00</div>
+        </div>
+
+        <div class="draw-wrap">
+          <canvas id="canvas" width="520" height="420"></canvas>
+
+          <div id="charadesBox" class="charades hidden">
+            CHARADES MODE
+          </div>
+
+          <div id="winnerPopup" class="winner hidden">
+            <div>CORRECT ANSWER:</div>
+            <div id="winnerAnswer">---</div>
+            <div id="winnerName">---</div>
+          </div>
+        </div>
+
+        <div id="finalLeaderboard" class="final hidden"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
