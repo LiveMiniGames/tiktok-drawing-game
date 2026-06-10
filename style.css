@@ -1,1829 +1,377 @@
-const drawingPrompts = `
-apple
-banana
-orange
-lemon
-lime
-grapes
-strawberry
-blueberry
-raspberry
-watermelon
-pineapple
-mango
-peach
-pear
-cherry
-coconut
-kiwi
-avocado
-carrot
-broccoli
-corn
-potato
-tomato
-mushroom
-pumpkin
-pepper
-onion
-lettuce
-pickle
-egg
-pizza
-burger
-fries
-hot dog
-taco
-burrito
-sandwich
-donut
-cupcake
-cake
-cookie
-pancakes
-waffle
-ice cream cone
-popsicle
-pretzel
-popcorn
-sushi
-noodles
-spaghetti
-steak
-chicken wing
-cereal box
-milk carton
-soda can
-water bottle
-coffee cup
-teapot
-bread loaf
-cheese wedge
-dog
-cat
-tiger
-lion
-bear
-panda
-koala
-monkey
-gorilla
-elephant
-giraffe
-zebra
-horse
-cow
-pig
-sheep
-goat
-deer
-fox
-wolf
-rabbit
-mouse
-rat
-squirrel
-kangaroo
-camel
-raccoon
-skunk
-hedgehog
-bat
-shark
-whale
-dolphin
-fish
-goldfish
-octopus
-squid
-crab
-lobster
-seahorse
-jellyfish
-starfish
-turtle
-frog
-crocodile
-alligator
-snake
-lizard
-iguana
-chameleon
-bird
-eagle
-owl
-penguin
-duck
-chicken
-rooster
-turkey
-flamingo
-parrot
-bee
-butterfly
-spider
-ant
-ladybug
-dragonfly
-grasshopper
-snail
-worm
-scorpion
-house
-castle
-school
-hospital
-church
-barn
-store
-restaurant
-hotel
-apartment building
-skyscraper
-tent
-cabin
-lighthouse
-windmill
-bridge
-tower
-factory
-gas station
-movie theater
-beach
-island
-mountain
-volcano
-waterfall
-river
-lake
-pond
-ocean
-forest
-cave
-desert
-road
-sidewalk
-fence
-garden
-farm
-playground
-park bench
-swimming pool
-basketball court
-football field
-soccer goal
-treehouse
-campfire
-picnic table
-mailbox
-street sign
-traffic light
-stop sign
-sun
-moon
-star
-cloud
-rainbow
-lightning bolt
-snowman
-snowflake
-raindrop
-fire
-tornado
-planet
-earth
-saturn
-rocket
-spaceship
-alien
-robot
-ghost
-zombie
-dragon
-unicorn
-monster
-mermaid
-pirate ship
-treasure chest
-crown
-sword
-shield
-magic wand
-chair
-table
-bed
-couch
-lamp
-door
-window
-toilet
-sink
-bathtub
-mirror
-clock
-television
-computer
-laptop
-keyboard
-mouse pad
-phone
-tablet
-headphones
-microphone
-camera
-speaker
-remote control
-fan
-fridge
-microwave
-oven
-toaster
-blender
-fork
-spoon
-knife
-plate
-bowl
-mug
-cup
-straw
-napkin
-backpack
-book
-notebook
-pencil
-pen
-marker
-paintbrush
-scissors
-glue bottle
-ruler
-eraser
-calculator
-desk
-trash can
-vacuum
-broom
-mop
-bucket
-laundry basket
-washing machine
-dryer
-shirt
-pants
-shorts
-dress
-jacket
-hoodie
-hat
-beanie
-shoe
-boot
-sock
-glove
-scarf
-belt
-watch
-ring
-necklace
-sunglasses
-umbrella
-wallet
-purse
-suitcase
-duffel bag
-shopping cart
-shopping bag
-gift box
-balloon
-kite
-yo yo
-teddy bear
-car
-truck
-bus
-train
-airplane
-helicopter
-boat
-ship
-submarine
-bicycle
-motorcycle
-scooter
-skateboard
-roller skates
-taxi
-police car
-fire truck
-ambulance
-tractor
-bulldozer
-crane
-forklift
-dump truck
-garbage truck
-tow truck
-golf cart
-rocket ship
-sled
-snowmobile
-basketball
-football
-soccer ball
-baseball
-tennis ball
-volleyball
-bowling ball
-golf ball
-hockey stick
-tennis racket
-baseball bat
-golf club
-skateboard ramp
-goal post
-trophy
-medal
-whistle
-helmet
-boxing glove
-dumbbell
-barbell
-jump rope
-surfboard
-snowboard
-skis
-fishing rod
-net
-dartboard
-chess board
-playing card
-guitar
-piano
-drum
-violin
-trumpet
-saxophone
-flute
-microphone stand
-boombox
-music note
-record
-paint palette
-easel
-canvas
-movie camera
-clapboard
-ticket
-dice
-puzzle piece
-game controller
-joystick
-arcade machine
-vending machine
-atm
-cash register
-money bag
-dollar bill
-coin
-credit card
-hammer
-wrench
-screwdriver
-saw
-drill
-nail
-screw
-ladder
-toolbox
-paint can
-flashlight
-candle
-light bulb
-battery
-magnet
-lock
-key
-chain
-anchor
-compass
-map
-globe
-binoculars
-telescope
-magnifying glass
-thermometer
-first aid kit
-bandage
-pill bottle
-syringe
-toothbrush
-toothpaste
-soap
-shampoo bottle
-towel
-hairbrush
-razor
-perfume bottle
-makeup brush
-lipstick
-alarm clock
-calendar
-hourglass
-clipboard
-newspaper
-envelope
-stamp
-paper airplane
-folder
-file cabinet
-whiteboard
-chalkboard
-graduation cap
-lunchbox
-water cooler
-printer
-stapler
-paperclip
-push pin
-pizza box
-takeout bag
-chopsticks
-frying pan
-pot
-spatula
-grill
-chef hat
-apron
-salt shaker
-pepper shaker
-ketchup bottle
-mustard bottle
-candy bar
-lollipop
-gumball machine
-jar
-cookie jar
-honey pot
-ice cube
-cooler
-thermos
-picnic basket
-trash bag
-recycling bin
-dog bowl
-cat bed
-bird cage
-fish bowl
-bedroom
-bathroom
-kitchen
-living room
-garage
-attic
-basement
-closet
-staircase
-elevator
-escalator
-doorbell
-doormat
-curtains
-blinds
-rug
-pillow
-blanket
-mattress
-bookshelf
-dresser
-nightstand
-fireplace
-chimney
-roof
-garage door
-fountain
-statue
-carousel
-ferris wheel
-roller coaster
-water slide
-swing set
-slide
-seesaw
-sandbox
-trampoline
-bounce house
-mini hoop
-basket
-goal net
-scoreboard
-megaphone
-flag
-flagpole
-badge
-police badge
-handcuffs
-fire hydrant
-traffic cone
-parking meter
-license plate
-speed limit sign
-crosswalk
-bus stop
-train tracks
-airport tower
-passport
-boarding pass
-doctor coat
-stethoscope
-hospital bed
-wheelchair
-crutches
-x ray
-ambulance stretcher
-tooth
-brain
-heart
-bone
-skeleton
-eye
-ear
-nose
-hand
-foot
-skull
-jack o lantern
-coffin
-gravestone
-haunted house
-witch hat
-cauldron
-broomstick
-candy corn
-christmas tree
-present
-stocking
-snow globe
-easter egg
-bunny ears
-valentine heart
-firework
-party hat
-confetti
-birthday cake
-birthday candle
-pinata
-mask
-ski mask
-crown jewel
-gem
-diamond
-gold bar
-safe
-bank
-jail cell
-cop car
-judge gavel
-briefcase
-office chair
-computer monitor
-wifi symbol
-charger
-usb cable
-router
-satellite dish
-drone
-vr headset
-controller
-gaming chair
-desk lamp
-ring light
-tripod
-webcam
-stream deck
-green screen
-studio light
-speaker stand
-cord
-extension cord
-power strip
-poster
-frame
-neon sign
-led strip
-graffiti wall
-spray can
-paint roller
-brick wall
-fence gate
-wooden plank
-log
-axe
-camping tent
-sleeping bag
-canteen
-lantern
-safety cone
-street lamp
-fire alarm
-smoke detector
-security camera
-mail truck
-delivery bag
-food tray
-clipboard chart
-shopping basket
-cash drawer
-receipt
-bar code
-qr code
-bowling pin
-pool table
-pool stick
-ping pong paddle
-cornhole board
-water gun
-nerf blaster
-toy car
-action figure
-doll house
-rubber duck
-soap dispenser
-bathrobe
-slippers
-headband
-earbuds
-microchip
-computer tower
-hard drive
-memory card
-game cartridge
-dvd
-blu ray disc
-cassette tape
-vinyl player
-snow shovel
-leaf blower
-watering can
-garden hose
-flower pot
-birdhouse
-doghouse
-cat tower
-hamster wheel
-aquarium
-` .trim().split("\n").map(x => x.trim()).filter(Boolean);
-
-const charadesPrompts = `
-running
-jumping
-walking
-speed walking
-tiptoeing
-marching
-crawling
-climbing
-falling down
-tripping
-slipping
-spinning
-stretching
-yawning
-sleeping
-waking up
-sneezing
-coughing
-laughing
-crying
-fake crying
-shouting
-whispering
-talking on phone
-texting
-taking a selfie
-posing for a photo
-checking watch
-looking confused
-looking scared
-looking angry
-looking excited
-looking bored
-looking nervous
-being shocked
-being dizzy
-being cold
-being hot
-being tired
-being sneaky
-hiding
-searching
-waving
-clapping
-pointing
-saluting
-praying
-begging
-celebrating
-cheering
-booing
-flexing
-dancing
-breakdancing
-slow dancing
-singing
-rapping
-playing air guitar
-playing piano
-playing drums
-playing violin
-conducting music
-brushing teeth
-washing hands
-taking a shower
-combing hair
-putting on makeup
-shaving face
-getting a haircut
-putting on shoes
-tying shoes
-zipping jacket
-buttoning shirt
-putting on hat
-putting on glasses
-taking off glasses
-folding clothes
-doing laundry
-making bed
-vacuuming
-sweeping
-mopping
-washing dishes
-drying dishes
-cooking
-flipping pancakes
-stirring soup
-chopping vegetables
-eating spaghetti
-eating hot soup
-eating a burger
-eating ice cream
-drinking water
-drinking hot coffee
-blowing on food
-ordering food
-paying cashier
-carrying groceries
-shopping
-pushing shopping cart
-scanning items
-opening present
-blowing out candles
-cutting cake
-wrapping gift
-decorating tree
-hanging lights
-throwing confetti
-breaking pinata
-trick or treating
-driving car
-turning steering wheel
-honking horn
-parking car
-riding bike
-riding motorcycle
-riding horse
-rowing boat
-swimming
-diving
-surfing
-ice skating
-roller skating
-skiing
-snowboarding
-skateboarding
-jumping rope
-lifting weights
-doing pushups
-doing situps
-doing jumping jacks
-doing yoga
-meditating
-boxing
-punching bag
-kicking ball
-playing soccer
-shooting basketball
-dribbling basketball
-throwing football
-catching football
-swinging baseball bat
-pitching baseball
-bowling
-golfing
-playing tennis
-serving volleyball
-throwing frisbee
-fishing
-reeling in fish
-walking dog
-feeding pet
-petting dog
-being a dog
-being a cat
-being a monkey
-being a chicken
-being a shark
-being a dinosaur
-being a robot
-being a zombie
-being a ghost
-being an alien
-being a pirate
-being a ninja
-being a cowboy
-being a baby
-being an old person
-being a teacher
-being a doctor
-being a chef
-being a waiter
-being a police officer
-being a firefighter
-being a magician
-doing magic trick
-pulling rope
-pushing wall
-opening door
-closing door
-knocking on door
-ringing doorbell
-looking through window
-locking door
-unlocking door
-digging
-planting flowers
-watering plants
-raking leaves
-shoveling snow
-building sandcastle
-setting up tent
-starting campfire
-roasting marshmallow
-swatting bug
-catching butterfly
-flying kite
-looking through binoculars
-using telescope
-reading book
-writing letter
-typing on keyboard
-using computer mouse
-printing paper
-stapling papers
-erasing board
-teaching class
-raising hand
-taking test
-cheating on test
-falling asleep in class
-opening locker
-carrying backpack
-waiting in line
-getting jump scared
-stepping on lego
-walking in rain
-walking in wind
-walking on ice
-walking through mud
-walking up stairs
-taking elevator
-riding escalator
-checking mailbox
-opening umbrella
-closing umbrella
-looking for keys
-dropping phone
-cracking phone
-charging phone
-taking picture
-recording video
-vlogging
-streaming
-putting on headset
-talking into microphone
-adjusting camera
-turning on light
-playing video game
-rage quitting
-winning game
-losing game
-throwing controller
-celebrating win
-facepalming
-shrugging
-rolling eyes
-nodding yes
-shaking head no
-giving thumbs up
-giving thumbs down
-air high five
-high fiving
-handshake
-bowing
-curtseying
-doing karate
-doing taekwondo
-sword fighting
-shooting bow
-throwing dart
-playing chess
-rolling dice
-dealing cards
-shuffling cards
-playing slot machine
-counting money
-swiping card
-using atm
-carrying suitcase
-packing suitcase
-unpacking suitcase
-checking passport
-boarding plane
-looking for seat
-putting bag overhead
-sleeping on plane
-getting motion sick
-waiting at bus stop
-calling taxi
-waving down taxi
-missing bus
-running late
-checking map
-getting lost
-asking directions
-crossing street
-stopping traffic
-directing traffic
-painting wall
-painting picture
-drawing picture
-spray painting
-hammering nail
-sawing wood
-using drill
-turning wrench
-climbing ladder
-changing lightbulb
-fixing sink
-fixing car
-changing tire
-pumping gas
-washing car
-taking out trash
-recycling
-opening jar
-closing jar
-pouring drink
-spilling drink
-cleaning spill
-opening can
-peeling banana
-cutting pizza
-tossing pizza dough
-grilling food
-flipping burger
-serving food
-waiting tables
-brushing pet
-feeding baby
-rocking baby
-changing diaper
-pushing stroller
-walking with cane
-using crutches
-using wheelchair
-taking temperature
-checking heartbeat
-giving shot
-putting on bandage
-brushing dust off
-scratching head
-scratching back
-itching
-getting mosquito bite
-swatting mosquito
-fanning yourself
-blowing nose
-holding breath
-smelling something bad
-smelling flowers
-tasting sour lemon
-eating spicy food
-brain freeze
-hiccuping
-burping
-choking
-coughing after drink
-sipping tea
-opening curtains
-closing curtains
-making coffee
-pouring cereal
-opening fridge
-closing fridge
-taking food from oven
-burning hand
-washing face
-brushing hair
-drying hair
-checking mirror
-trying on clothes
-walking runway
-model posing
-putting on perfume
-spraying deodorant
-doing laundry dance
-ironing shirt
-folding towel
-carrying heavy box
-dropping box
-pushing heavy object
-pulling heavy object
-lifting suitcase
-dragging suitcase
-opening window
-closing window
-cleaning window
-using remote
-watching scary movie
-watching sad movie
-watching sports
-falling asleep on couch
-eating popcorn
-cheering touchdown
-arguing with referee
-throwing flag
-doing touchdown dance
-shooting free throw
-missing shot
-blocking shot
-goalie save
-celebrating goal
-riding roller coaster
-getting dizzy on ride
-playing carnival game
-winning prize
-losing prize
-eating cotton candy
-licking lollipop
-chewing gum
-blowing bubblegum
-getting gum stuck
-jumping on trampoline
-sliding down slide
-swinging on swing
-jumping in pool
-floating on back
-snorkeling
-scuba diving
-building snowman
-having snowball fight
-making snow angel
-sledding
-ice fishing
-putting sunscreen on
-getting sunburned
-laying on beach
-collecting seashells
-getting chased by bee
-stepping in puddle
-jumping over puddle
-running from rain
-catching raindrops
-holding balloon
-letting balloon go
-chasing balloon
-flying like superhero
-casting spell
-riding broomstick
-mixing potion
-zombie walking
-robot dancing
-pirate sword fight
-ninja sneaking
-cowboy lasso
-magician disappearing
-detective searching
-spy sneaking
-guard standing
-bodybuilder posing
-chef tasting soup
-waiter carrying tray
-teacher scolding
-doctor checking patient
-dentist drilling
-barber cutting hair
-photographer posing model
-news reporter talking
-weather reporter pointing
-DJ mixing music
-rapper performing
-singer hitting high note
-drummer going crazy
-guitar solo
-piano recital
-ballet dancing
-tap dancing
-moonwalking
-doing the worm
-doing floss dance
-doing robot dance
-air drumming
-air piano
-air violin
-karaoke singing
-opera singing
-lip syncing
-opening soda
-shaking soda
-getting sprayed by soda
-eating corn on cob
-eating watermelon
-spitting seeds
-slurping noodles
-using chopsticks
-dropping chopsticks
-eating with fork
-cutting steak
-licking ice cream
-dropping ice cream
-picking up coin
-finding money
-losing wallet
-checking pockets
-opening safe
-counting coins
-flipping coin
-reading newspaper
-falling asleep reading
-turning pages
-ripping paper
-folding paper airplane
-throwing paper airplane
-catching paper airplane
-using scissors
-gluing paper
-painting nails
-walking like penguin
-hopping like rabbit
-stomping like elephant
-slithering like snake
-flying like bird
-swimming like fish
-roaring like lion
-climbing like monkey
-waddling like duck
-pecking like chicken
-mooing like cow
-oinking like pig
-howling like wolf
-meowing like cat
-barking like dog
-buzzing like bee
-flapping butterfly wings
-hiding from monster
-pretending to be rich
-pretending to be broke
-getting bad news
-getting good news
-waiting impatiently
-checking doorbell camera
-dodging something
-ducking under something
-jumping over rope
-catching falling object
-balancing on one foot
-walking a tightrope
-juggling badly
-trying to stay awake
-trying not to laugh
-trying not to cry
-pretending to be asleep
-waking up late
-missing alarm
-hitting snooze
-running from monster
-escaping jail
-opening handcuffs
-walking in handcuffs
-getting arrested
-pleading your case
-sitting in court
-slamming gavel
-reading verdict
-celebrating freedom
-losing balance
-getting punched
-dodging punch
-throwing fake punch
-doing shadow boxing
-stretching hamstring
-touching toes
-cracking knuckles
-cracking neck
-rolling shoulders
-massaging back
-holding stomachache
-having headache
-limping badly
-fainting dramatically
-being hypnotized
-acting possessed
-getting scared by ghost
-holding flashlight
-searching dark room
-hearing weird noise
-opening creaky door
-sneaking through house
-hiding under table
-checking under bed
-looking behind curtain
-using metal detector
-digging treasure
-finding treasure
-putting on crown
-sword fighting pirate
-walking the plank
-rowing lifeboat
-being seasick
-fighting waves
-climbing mountain
-sliding down hill
-getting stuck in mud
-pulling foot from mud
-walking through spiderweb
-getting web off face
-getting chased by dog
-training dog
-throwing dog treat
-catching frisbee with mouth
-acting like fish
-acting like crab
-acting like turtle
-acting like gorilla
-acting like elephant
-acting like giraffe
-acting like frog
-acting like snake
-acting like penguin
-acting like flamingo
-` .trim().split("\n").map(x => x.trim()).filter(Boolean);
-
-const brushPresetColors = [
-  "#ffffff", "#000000", "#ff2d2d", "#ff7a00", "#ffe600", "#00ff66",
-  "#00d4ff", "#0066ff", "#8b3dff", "#ff4fd8", "#9b5a2e", "#808080"
-];
-
-const bgPresetColors = [
-  "#050505", "#ffffff", "#1a1a1a", "#12324a", "#153d24", "#4a1414",
-  "#4a3d12", "#2b164a", "#f4e7c5", "#dff6ff", "#ffe6f2", "#e8ffe8"
-];
-
-let drawingBag = JSON.parse(localStorage.getItem("drawingBag") || "[]");
-let charadesBag = JSON.parse(localStorage.getItem("charadesBag") || "[]");
-
-let game = {
-  active: false,
-  mode: "drawing",
-  round: 0,
-  totalRounds: 5,
-  roundSeconds: 60,
-  secondsLeft: 60,
-  answer: "",
-  solved: false,
-  waitingForNext: false,
-  sessionScores: {},
-  timer: null
-};
-
-let ws = null;
-let drawing = false;
-let lastX = 0;
-let lastY = 0;
-let eraser = false;
-let currentBrushColor = "#ffffff";
-let currentBgColor = "#050505";
-
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
-
-const streamCard = document.querySelector(".stream-card");
-const drawWrap = document.getElementById("drawWrap");
-
-const connectBtn = document.getElementById("connectBtn");
-const connectionStatus = document.getElementById("connectionStatus");
-
-const modeInput = document.getElementById("mode");
-const roundCountInput = document.getElementById("roundCount");
-const timerSecondsInput = document.getElementById("timerSeconds");
-const customWordInput = document.getElementById("customWord");
-
-const randomWordBtn = document.getElementById("randomWordBtn");
-const startGameBtn = document.getElementById("startGameBtn");
-const nextRoundBtn = document.getElementById("nextRoundBtn");
-const endGameBtn = document.getElementById("endGameBtn");
-
-const secretWord = document.getElementById("secretWord");
-const brushColor = document.getElementById("brushColor");
-const bgColor = document.getElementById("bgColor");
-const applyBgBtn = document.getElementById("applyBgBtn");
-const brushSize = document.getElementById("brushSize");
-const eraserBtn = document.getElementById("eraserBtn");
-const clearBtn = document.getElementById("clearBtn");
-
-const roundText = document.getElementById("roundText");
-const timerText = document.getElementById("timerText");
-
-const winnerPopup = document.getElementById("winnerPopup");
-const winnerAnswer = document.getElementById("winnerAnswer");
-const winnerName = document.getElementById("winnerName");
-const winnerPoints = document.getElementById("winnerPoints");
-
-const timesUpPopup = document.getElementById("timesUpPopup");
-const timesUpAnswer = document.getElementById("timesUpAnswer");
-
-const finalLeaderboard = document.getElementById("finalLeaderboard");
-const hostLeaderboard = document.getElementById("hostLeaderboard");
-const charadesBox = document.getElementById("charadesBox");
-
-function normalize(text) {
-  return String(text || "")
-    .toLowerCase()
-    .replace(/[^\w\s]/g, "")
-    .replace(/\s+/g, " ")
-    .trim();
+* {
+  box-sizing: border-box;
 }
 
-function censorUsername(username) {
-  let clean = String(username || "unknown");
-  const banned = ["nigger", "nigga", "faggot", "retard", "kike", "chink", "spic"];
-
-  banned.forEach(word => {
-    clean = clean.replace(new RegExp(word, "gi"), "****");
-  });
-
-  return clean;
+:root {
+  --bg: #09090b;
+  --panel: #141417;
+  --panel-2: #1c1c21;
+  --border: #2f3037;
+  --text: #f8fafc;
+  --muted: #a1a1aa;
+  --accent: #2563eb;
+  --success: #16a34a;
+  --warning: #f59e0b;
+  --danger: #dc2626;
 }
 
-function formatTime(seconds) {
-  const m = Math.floor(seconds / 60);
-  const s = seconds % 60;
-  return `${m}:${String(s).padStart(2, "0")}`;
+body {
+  margin: 0;
+  background: #09090b;
+  color: var(--text);
+  font-family: Inter, Arial, Helvetica, sans-serif;
 }
 
-function cryptoRandom() {
-  if (window.crypto && window.crypto.getRandomValues) {
-    const values = new Uint32Array(1);
-    window.crypto.getRandomValues(values);
-    return values[0] / (0xffffffff + 1);
+.app {
+  height: 100vh;
+  padding: 18px;
+  display: flex;
+  gap: 18px;
+}
+
+.controls {
+  width: 370px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.controls h1 {
+  margin: 0 0 14px;
+  font-size: 24px;
+}
+
+.controls h2 {
+  font-size: 16px;
+  margin: 14px 0 8px;
+}
+
+.status {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+label {
+  display: block;
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+input,
+select,
+button {
+  width: 100%;
+  padding: 11px 12px;
+  margin-top: 7px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  font-size: 15px;
+}
+
+input,
+select {
+  background: #0f0f12;
+  color: var(--text);
+}
+
+button {
+  background: #2563eb;
+  color: white;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.08s ease, background 0.12s ease;
+}
+
+button:hover {
+  background: #1d4ed8;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 18px 0;
+}
+
+#secretWord {
+  background: #0f0f12;
+  border: 1px solid var(--border);
+  color: #22c55e;
+  font-size: 30px;
+  font-weight: 900;
+  text-align: center;
+  padding: 12px;
+  border-radius: 12px;
+  text-transform: uppercase;
+}
+
+.preset-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.preset {
+  height: 36px;
+  padding: 0;
+  border-radius: 9px;
+  border: 2px solid #3f3f46;
+  cursor: pointer;
+}
+
+.preset.active {
+  border: 3px solid white;
+  outline: 2px solid var(--accent);
+}
+
+.stream-area {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stream-card {
+  width: 600px;
+  height: 640px;
+  background: #111114;
+  border: 1px solid #303039;
+  border-radius: 22px;
+  padding: 14px;
+  position: relative;
+}
+
+.topbar {
+  height: 60px;
+  background: #18181c;
+  border: 1px solid #2b2c34;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  font-size: 28px;
+  font-weight: 950;
+  letter-spacing: 0.02em;
+}
+
+#timerText {
+  padding: 6px 14px;
+  border-radius: 12px;
+  min-width: 102px;
+  text-align: center;
+}
+
+.timer-ok {
+  color: #22c55e;
+  background: rgba(34, 197, 94, 0.1);
+}
+
+.timer-mid {
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.14);
+  animation: timerPulse 0.75s infinite alternate;
+}
+
+.timer-danger {
+  color: white;
+  background: #dc2626;
+  animation: timerDanger 0.32s infinite alternate;
+}
+
+@keyframes timerPulse {
+  from {
+    transform: scale(1);
   }
-
-  return Math.random();
-}
-
-function shuffleArray(array) {
-  const arr = [...array];
-
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(cryptoRandom() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-
-  return arr;
-}
-
-function getPromptForMode(mode) {
-  const isCharades = mode === "charades";
-  const sourceList = isCharades ? charadesPrompts : drawingPrompts;
-  const storageKey = isCharades ? "charadesBag" : "drawingBag";
-
-  let bag = isCharades ? charadesBag : drawingBag;
-
-  if (!Array.isArray(bag) || bag.length === 0) {
-    bag = shuffleArray(sourceList);
-  }
-
-  const word = bag.pop();
-
-  if (isCharades) {
-    charadesBag = bag;
-    localStorage.setItem(storageKey, JSON.stringify(charadesBag));
-  } else {
-    drawingBag = bag;
-    localStorage.setItem(storageKey, JSON.stringify(drawingBag));
-  }
-
-  return word;
-}
-
-function setBackground(color) {
-  currentBgColor = color;
-  canvas.style.background = color;
-  drawWrap.style.background = color;
-}
-
-function clearDrawing() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-}
-
-function updateDangerState() {
-  const danger = game.active && !game.waitingForNext && !game.solved && game.secondsLeft <= 10 && game.secondsLeft > 0;
-
-  timerText.classList.toggle("warning", danger);
-  streamCard.classList.toggle("warning", danger);
-  drawWrap.classList.toggle("warning", danger);
-}
-
-function updateUI() {
-  roundText.textContent = `ROUND ${game.round}/${game.totalRounds}`;
-  timerText.textContent = formatTime(game.secondsLeft);
-  secretWord.textContent = game.answer || "---";
-
-  if (game.mode === "charades") {
-    charadesBox.classList.remove("hidden");
-    canvas.classList.add("hidden");
-  } else {
-    charadesBox.classList.add("hidden");
-    canvas.classList.remove("hidden");
-  }
-
-  updateDangerState();
-  renderHostLeaderboard();
-}
-
-function startGame() {
-  game.mode = modeInput.value;
-  game.totalRounds = Number(roundCountInput.value);
-  game.roundSeconds = Number(timerSecondsInput.value);
-  game.round = 0;
-  game.active = true;
-  game.solved = false;
-  game.waitingForNext = false;
-  game.sessionScores = {};
-
-  finalLeaderboard.classList.add("hidden");
-  winnerPopup.classList.add("hidden");
-  timesUpPopup.classList.add("hidden");
-
-  nextRound();
-}
-
-function nextRound() {
-  if (!game.active) return;
-
-  if (game.round >= game.totalRounds) {
-    endGame(true);
-    return;
-  }
-
-  game.round++;
-  game.solved = false;
-  game.waitingForNext = false;
-  game.secondsLeft = game.roundSeconds;
-
-  const custom = customWordInput.value.trim();
-
-  if (custom) {
-    game.answer = custom;
-  } else {
-    game.answer = getPromptForMode(game.mode);
-  }
-
-  customWordInput.value = "";
-
-  clearDrawing();
-  winnerPopup.classList.add("hidden");
-  timesUpPopup.classList.add("hidden");
-  finalLeaderboard.classList.add("hidden");
-
-  startTimer();
-  updateUI();
-}
-
-function startTimer() {
-  clearInterval(game.timer);
-
-  game.timer = setInterval(() => {
-    if (!game.active || game.solved || game.waitingForNext) return;
-
-    game.secondsLeft--;
-
-    if (game.secondsLeft <= 0) {
-      game.secondsLeft = 0;
-      game.solved = true;
-      game.waitingForNext = true;
-      clearInterval(game.timer);
-      showNoWinner();
-    }
-
-    updateUI();
-  }, 1000);
-}
-
-function calculatePoints() {
-  const basePoints = 100;
-  const timeBonus = Math.ceil((game.secondsLeft / game.roundSeconds) * 100);
-  return basePoints + timeBonus;
-}
-
-function handleGuess(username, message) {
-  if (!game.active || game.solved || game.waitingForNext || !game.answer) return;
-
-  const cleanUsername = censorUsername(username);
-  const guess = normalize(message);
-  const answer = normalize(game.answer);
-
-  if (guess === answer) {
-    game.solved = true;
-    game.waitingForNext = true;
-    clearInterval(game.timer);
-
-    const points = calculatePoints();
-    game.sessionScores[cleanUsername] = (game.sessionScores[cleanUsername] || 0) + points;
-
-    showWinner(cleanUsername, points);
-    updateUI();
+  to {
+    transform: scale(1.08);
   }
 }
 
-function showWinner(username, points) {
-  winnerAnswer.textContent = game.answer;
-  winnerName.textContent = `@${username}`;
-  winnerPoints.textContent = `GOT IT FIRST! +${points} POINTS`;
-
-  timesUpPopup.classList.add("hidden");
-  winnerPopup.classList.remove("hidden");
-}
-
-function showNoWinner() {
-  timesUpAnswer.textContent = game.answer;
-
-  winnerPopup.classList.add("hidden");
-  timesUpPopup.classList.remove("hidden");
-}
-
-function endGame(showFinal) {
-  game.active = false;
-  game.waitingForNext = false;
-  clearInterval(game.timer);
-
-  if (showFinal) {
-    showFinalLeaderboard();
+@keyframes timerDanger {
+  from {
+    transform: scale(1.05) rotate(-1deg);
+    background: #dc2626;
   }
-
-  updateUI();
-}
-
-function getSessionLeaderboard() {
-  return Object.entries(game.sessionScores)
-    .sort((a, b) => b[1] - a[1])
-    .map(([username, points]) => ({ username, points }));
-}
-
-function showFinalLeaderboard() {
-  const rows = getSessionLeaderboard();
-
-  finalLeaderboard.innerHTML = `<h1>🏆 FINAL LEADERBOARD 🏆</h1>`;
-
-  if (rows.length === 0) {
-    finalLeaderboard.innerHTML += `<div class="leader-row">No winners this game</div>`;
-  } else {
-    rows.forEach((row, index) => {
-      finalLeaderboard.innerHTML += `
-        <div class="leader-row">
-          <span>${index + 1}. @${row.username}</span>
-          <span>${row.points}</span>
-        </div>
-      `;
-    });
-  }
-
-  finalLeaderboard.classList.remove("hidden");
-}
-
-function renderHostLeaderboard() {
-  const rows = getSessionLeaderboard();
-  hostLeaderboard.innerHTML = "";
-
-  rows.forEach((row, index) => {
-    const div = document.createElement("div");
-    div.className = "host-leader-row";
-    div.innerHTML = `<span>${index + 1}. @${row.username}</span><b>${row.points}</b>`;
-    hostLeaderboard.appendChild(div);
-  });
-}
-
-function getCanvasPos(e) {
-  const rect = canvas.getBoundingClientRect();
-  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-
-  return {
-    x: ((clientX - rect.left) / rect.width) * canvas.width,
-    y: ((clientY - rect.top) / rect.height) * canvas.height
-  };
-}
-
-function drawLine(x1, y1, x2, y2) {
-  ctx.strokeStyle = eraser ? currentBgColor : currentBrushColor;
-  ctx.lineWidth = Number(brushSize.value);
-  ctx.lineCap = "round";
-  ctx.beginPath();
-  ctx.moveTo(x1, y1);
-  ctx.lineTo(x2, y2);
-  ctx.stroke();
-}
-
-function startDrawing(e) {
-  if (game.mode === "charades") return;
-
-  drawing = true;
-  const pos = getCanvasPos(e);
-  lastX = pos.x;
-  lastY = pos.y;
-}
-
-function moveDrawing(e) {
-  if (!drawing || game.mode === "charades") return;
-
-  e.preventDefault();
-
-  const pos = getCanvasPos(e);
-  drawLine(lastX, lastY, pos.x, pos.y);
-
-  lastX = pos.x;
-  lastY = pos.y;
-}
-
-function stopDrawing() {
-  drawing = false;
-}
-
-function connectTikFinity() {
-  connectionStatus.textContent = "Connecting...";
-
-  try {
-    ws = new WebSocket("ws://127.0.0.1:21213/");
-
-    ws.onopen = () => {
-      connectionStatus.textContent = "Connected to TikFinity";
-    };
-
-    ws.onclose = () => {
-      connectionStatus.textContent = "Disconnected";
-    };
-
-    ws.onerror = () => {
-      connectionStatus.textContent = "Connection error. Is TikFinity open?";
-    };
-
-    ws.onmessage = event => {
-      try {
-        const data = JSON.parse(event.data);
-        const chat = extractChat(data);
-
-        if (chat) {
-          handleGuess(chat.username, chat.message);
-        }
-      } catch (err) {
-        console.log("TikFinity parse error:", err);
-      }
-    };
-  } catch (err) {
-    connectionStatus.textContent = "Failed to connect";
+  to {
+    transform: scale(1.2) rotate(1deg);
+    background: #991b1b;
   }
 }
 
-function extractChat(data) {
-  const possibleMessage =
-    data.comment ||
-    data.message ||
-    data.text ||
-    data.msg ||
-    data.data?.comment ||
-    data.data?.message ||
-    data.data?.text ||
-    data.event?.comment ||
-    data.event?.message;
+.draw-wrap {
+  position: relative;
+  margin-top: 14px;
+  width: 100%;
+  height: 520px;
+  background: #0f172a;
+  border: 1px solid #303039;
+  border-radius: 18px;
+  overflow: hidden;
+}
 
-  const possibleUsername =
-    data.uniqueId ||
-    data.username ||
-    data.user ||
-    data.nickname ||
-    data.data?.uniqueId ||
-    data.data?.username ||
-    data.data?.nickname ||
-    data.event?.uniqueId ||
-    data.event?.username;
+.draw-wrap.mid-warning {
+  border-color: #f59e0b;
+}
 
-  const type = String(
-    data.type ||
-    data.eventType ||
-    data.event ||
-    data.name ||
-    data.data?.type ||
-    data.data?.eventType ||
-    ""
-  ).toLowerCase();
+.draw-wrap.danger-warning {
+  border-color: #dc2626;
+  animation: borderFlash 0.35s infinite alternate;
+}
 
-  if ((type.includes("chat") || type.includes("comment") || possibleMessage) && possibleMessage && possibleUsername) {
-    return {
-      username: possibleUsername,
-      message: possibleMessage
-    };
+@keyframes borderFlash {
+  from {
+    box-shadow: inset 0 0 0 0 rgba(220, 38, 38, 0);
   }
-
-  return null;
+  to {
+    box-shadow: inset 0 0 0 10px rgba(220, 38, 38, 0.55);
+  }
 }
 
-function buildColorButtons(containerId, colors, onClick) {
-  const container = document.getElementById(containerId);
-  container.innerHTML = "";
-
-  colors.forEach(color => {
-    const button = document.createElement("button");
-    button.className = "color-dot";
-    button.type = "button";
-    button.style.background = color;
-
-    button.onclick = () => {
-      container.querySelectorAll(".color-dot").forEach(b => b.classList.remove("active"));
-      button.classList.add("active");
-      onClick(color);
-    };
-
-    container.appendChild(button);
-  });
+canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: crosshair;
+  touch-action: none;
+  background: #0f172a;
 }
 
-connectBtn.onclick = connectTikFinity;
+.charades {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #18181c, #0b0b0d);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  text-align: center;
+  padding: 34px;
+}
 
-randomWordBtn.onclick = () => {
-  customWordInput.value = getPromptForMode(modeInput.value);
-};
+.charades-kicker {
+  font-size: 18px;
+  color: var(--muted);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
 
-startGameBtn.onclick = startGame;
-nextRoundBtn.onclick = nextRound;
-endGameBtn.onclick = () => endGame(true);
+.charades-title {
+  font-size: 58px;
+  font-weight: 950;
+}
 
-clearBtn.onclick = clearDrawing;
+.charades-subtitle {
+  font-size: 25px;
+  line-height: 1.25;
+  color: #d4d4d8;
+  font-weight: 800;
+}
 
-eraserBtn.onclick = () => {
-  eraser = !eraser;
-  eraserBtn.textContent = eraser ? "Eraser On" : "Eraser Off";
-};
+.winner,
+.timesup {
+  position: absolute;
+  inset: 0;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  font-weight: 950;
+  text-align: center;
+  z-index: 10;
+  padding: 22px;
+}
 
-brushColor.oninput = () => {
-  currentBrushColor = brushColor.value;
-  eraser = false;
-  eraserBtn.textContent = "Eraser Off";
-};
+.winner {
+  background: linear-gradient(180deg, #16a34a, #064e3b);
+}
 
-bgColor.oninput = () => {
-  setBackground(bgColor.value);
-};
+.timesup {
+  background: linear-gradient(180deg, #dc2626, #450a0a);
+}
 
-applyBgBtn.onclick = () => {
-  setBackground(bgColor.value);
-};
+.popup-label {
+  font-size: 30px;
+  letter-spacing: 0.05em;
+}
 
-document.getElementById("testGuessBtn").onclick = () => {
-  const username = document.getElementById("testUsername").value || "testuser";
-  const guess = document.getElementById("testGuess").value;
-  handleGuess(username, guess);
-};
+.popup-answer {
+  font-size: 62px;
+  text-transform: uppercase;
+  line-height: 1;
+  max-width: 96%;
+  overflow-wrap: anywhere;
+}
 
-canvas.addEventListener("mousedown", startDrawing);
-canvas.addEventListener("mousemove", moveDrawing);
-canvas.addEventListener("mouseup", stopDrawing);
-canvas.addEventListener("mouseleave", stopDrawing);
+.winner-user {
+  font-size: 42px;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 12px 24px;
+  border-radius: 16px;
+  max-width: 96%;
+  overflow-wrap: anywhere;
+}
 
-canvas.addEventListener("touchstart", startDrawing);
-canvas.addEventListener("touchmove", moveDrawing);
-canvas.addEventListener("touchend", stopDrawing);
+.winner-points,
+.no-one {
+  font-size: 34px;
+}
 
-buildColorButtons("brushPresets", brushPresetColors, color => {
-  currentBrushColor = color;
-  brushColor.value = color;
-  eraser = false;
-  eraserBtn.textContent = "Eraser Off";
-});
+.timesup-title {
+  font-size: 64px;
+}
 
-buildColorButtons("bgPresets", bgPresetColors, color => {
-  bgColor.value = color;
-  setBackground(color);
-});
+.final {
+  position: absolute;
+  inset: 14px;
+  background: #0b0b0d;
+  border: 1px solid #3f3f46;
+  border-radius: 18px;
+  padding: 18px;
+  z-index: 20;
+  text-align: center;
+  overflow-y: auto;
+}
 
-setBackground(currentBgColor);
-updateUI();
+.final h1 {
+  margin-top: 0;
+  font-size: 34px;
+}
+
+.leader-row,
+.host-leader-row {
+  display: flex;
+  justify-content: space-between;
+  background: #1c1c21;
+  border: 1px solid #303039;
+  margin: 6px 0;
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: 800;
+}
+
+.leader-row {
+  font-size: 22px;
+}
+
+.host-leader-row {
+  font-size: 14px;
+}
+
+.hidden {
+  display: none !important;
+}
